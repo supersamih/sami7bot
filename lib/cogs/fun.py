@@ -116,21 +116,13 @@ class Fun(Cog):
             else:
                 await ctx.send(f"Oops didn't work: {response.status}")
 
-    @command(name="dailynasa", aliases=["dn"])
-    async def NASA_DAILY(self, ctx):
-        API_KEY = "3oSG6NpQdf7TyH9q6EameCeLbL2hQwkOyUYw2BPe"
-        URL = f"https://api.nasa.gov/planetary/apod?api_key={API_KEY}"
-        async with request("GET", URL) as response:
-            if response.status == 200:
-                data = await response.json()
-                title = data["title"]
-                description = data["explanation"]
-                image_url = data["hdurl"]
-                embed = Embed(title=title, description=description, colour=0xF6AE2D)
-                embed.set_image(url=image_url)
-                await ctx.send(embed=embed)
-            else:
-                await ctx.send(f"Oops didn't work: {response.status}")
+    @command(name="charizard")
+    async def charizard(self, ctx):
+        URL = "https://play.pokemonshowdown.com/sprites/ani/charizard.gif"
+        embed = Embed(title="charizard",
+                      colour=0xF6AE2D)
+        embed.set_image(url=URL)
+        await ctx.send(embed=embed)
 
     @Cog.listener()
     async def on_ready(self):

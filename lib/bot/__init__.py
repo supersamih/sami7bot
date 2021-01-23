@@ -4,7 +4,8 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord import Intents
 from discord.errors import Forbidden
 # from discord import Embed, File
-from discord.ext.commands import CommandNotFound, Context, BadArgument, MissingRequiredArgument, CommandOnCooldown
+from discord.ext.commands import CommandNotFound, Context, BadArgument, MissingRequiredArgument
+from discord.ext.commands import CommandOnCooldown, CheckFailure
 from ..db import db
 from glob import glob
 
@@ -82,6 +83,9 @@ class Bot(BotBase):
     async def on_command_error(self, ctx, exc):
         if any(isinstance(exc, error) for error in IGNORE_EXCEPTIONS):
             pass
+
+        elif isinstance(exc, CheckFailure):
+            await ctx.send("You don't have permission to do this...\nNaughty naughty")
 
         elif isinstance(exc, MissingRequiredArgument):
             await ctx.send("One or more required arguments missing")
