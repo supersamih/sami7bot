@@ -31,7 +31,7 @@ class Reactions(Cog):
                             '🟣': self.bot.guild.get_role(802313541582716949),
                             '⚪': self.bot.guild.get_role(802313677898252288)
                             }
-            self.reaction_message = await self.bot.get_channel(802135054771945472).fetch_message(802154728175042560)
+            self.reaction_message = await self.bot.get_channel(802135054771945472).fetch_message(802329518722908170)
             self.bot.cogs_ready.ready_up("reactions")
 
     @Cog.listener()

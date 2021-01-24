@@ -104,13 +104,20 @@ class Fun(Cog):
                 await ctx.send(f"Oops didn't work: {response.status}")
 
     @command(name="doggo")
-    async def doggo(self, ctx):
-        URL = "https://dog.ceo/api/breeds/image/random"
+    async def doggo(self, ctx, breed: Optional[str]):
+        if breed:
+            URL = f"https://dog.ceo/api/breed/{breed}/images/random"
+        else:
+            URL = "https://dog.ceo/api/breeds/image/random"
         async with request("GET", URL) as response:
             if response.status == 200:
                 data = await response.json()
-                dog = Embed(title="Here is a cute doggo",
-                            colour=0xF6AE2D)
+                if breed:
+                    dog = Embed(title=f"Here is a cute {breed}",
+                                colour=0xF6AE2D)
+                else:
+                    dog = Embed(title="Here is a cute doggo",
+                                colour=0xF6AE2D)
                 dog.set_image(url=data["message"])
                 await ctx.send(embed=dog)
             else:
