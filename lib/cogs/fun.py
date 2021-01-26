@@ -3,7 +3,7 @@ from discord.ext.commands import Cog, command, BadArgument
 # from discord.ext.commands import BucketType, cooldown
 from discord import Embed, Member
 from random import randint
-import pokebase as pb
+# import pokebase as pb
 from aiohttp import request
 
 
@@ -39,14 +39,14 @@ class Fun(Cog):
         await ctx.message.delete()
         await ctx.send(message)
 
-    @command(name="pokemon")
-    async def pokemon(self, ctx):
-        randomnum = randint(0, 151)
-        pokemon = pb.pokemon(randomnum)
-        sprite = pb.SpriteResource('pokemon', randomnum)
-        pokeEmbed = Embed(title=pokemon.name.capitalize(), description="This is a pokemon")
-        pokeEmbed.set_image(url=sprite.url)
-        await ctx.send(embed=pokeEmbed)
+    # @command(name="pokemon")
+    # async def pokemon(self, ctx):
+    #     randomnum = randint(0, 151)
+    #     pokemon = pb.pokemon(randomnum)
+    #     sprite = pb.SpriteResource('pokemon', randomnum)
+    #     pokeEmbed = Embed(title=pokemon.name.capitalize(), description="This is a pokemon")
+    #     pokeEmbed.set_image(url=sprite.url)
+    #     await ctx.send(embed=pokeEmbed)
 
     @command(name="nana")
     async def nana(self, ctx):
