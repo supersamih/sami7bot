@@ -128,3 +128,6 @@ TEST-**.xml
 
 # Discord Token
 token
+
+# Windows Executable
+*.exe
