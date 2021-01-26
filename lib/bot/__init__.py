@@ -56,7 +56,7 @@ class Bot(BotBase):
         self.VERSION = VERSION
         print("Running setup...")
         self.setup()
-        with open("./lib/bot/token.0", "r", encoding="utf-8") as tf:
+        with open("./lib/bot/token", "r", encoding="utf-8") as tf:
             self.TOKEN = tf.read()
 
         print("Running bot..")
