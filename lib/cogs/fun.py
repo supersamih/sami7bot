@@ -124,7 +124,8 @@ class Fun(Cog):
                 await ctx.send(embed=dog)
             else:
                 await ctx.send(f"Oops didn't work: {response.status}")
-
+                
+# charizard is a pokemon
     @command(name="charizard")
     async def charizard(self, ctx):
         URL = "https://play.pokemonshowdown.com/sprites/ani/charizard.gif"
