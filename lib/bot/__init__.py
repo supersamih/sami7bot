@@ -3,7 +3,6 @@ from discord.ext.commands import Bot as BotBase
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord import Intents
 from discord.errors import Forbidden
-# from discord import Embed, File
 from discord.ext.commands import CommandNotFound, Context, BadArgument, MissingRequiredArgument
 from discord.ext.commands import CommandOnCooldown, CheckFailure
 from ..db import db
@@ -12,6 +11,8 @@ from glob import glob
 
 PREFIX = ">"
 OWNER_IDS = [114656846664564740]
+# CONSIDER OS DIFFERENCES
+# import os maybe
 COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
 IGNORE_EXCEPTIONS = (CommandNotFound, BadArgument)
 

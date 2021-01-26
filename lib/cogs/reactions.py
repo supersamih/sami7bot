@@ -1,5 +1,7 @@
 from discord.ext.commands import Cog, command, has_permissions
 from discord import Embed, Message
+from datetime import datetime
+from ..db import db
 
 
 class Reactions(Cog):
@@ -32,6 +34,7 @@ class Reactions(Cog):
                             '⚪': self.bot.guild.get_role(802313677898252288)
                             }
             self.reaction_message = await self.bot.get_channel(802135054771945472).fetch_message(802329518722908170)
+            self.starboard_channel = self.bot.get_channel(803393663832293406)
             self.bot.cogs_ready.ready_up("reactions")
 
     @Cog.listener()
@@ -41,6 +44,37 @@ class Reactions(Cog):
             await payload.member.remove_roles(*current_colours, reason="Colour role react")
             await payload.member.add_roles(self.colours[payload.emoji.name], reason="Colour role react")
             await self.reaction_message.remove_reaction(payload.emoji, payload.member)
+        # picking the emoji that will trigger this code
+        elif payload.emoji.name == "🌟":
+            # get channel and then message from that channel
+            message = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
+            # if not bot or the same person who made the message create this to send to starboard
+            if not message.author.bot and payload.member.id != message.author.id:
+                msg_id, stars = db.record("SELECT StarMessageID, Stars FROM starboard WHERE RootMessageID = ?",
+                                          message.id) or (None, 0)
+                embed = Embed(title="Starred message",
+                              colour=message.author.colour,
+                              timestamp=datetime.utcnow())
+                fields = [("Author", message.author.mention, False),
+                          ("Content", message.content or "See attachment", False),
+                          ("Stars", stars + 1, False)]
+                for name, value, inline in fields:
+                    embed.add_field(name=name, value=value, inline=inline)
+                if len(message.attachments):
+                    # if message has any attatchments add the first one as an image
+                    embed.set_image(url=message.attachments[0].url)
+                if not stars:
+                    star_message = await self.starboard_channel.send(embed=embed)
+                    db.execute("INSERT INTO starboard (RootMessageID, StarMessageID) VALUES(?, ?)",
+                               message.id, star_message.id)
+                else:
+                    star_message = await self.starboard_channel.fetch_message(msg_id)
+                    await star_message.edit(embed=embed)
+                    db.execute("UPDATE starboard SET Stars = Stars + 1 WHERE RootMessageID = ?",
+                               message.id)
+            else:
+                # else remove the reaction
+                await message.remove_reaction(payload.emoji, payload.member)
 
 
 def setup(bot):

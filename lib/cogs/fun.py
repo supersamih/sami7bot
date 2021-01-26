@@ -63,6 +63,8 @@ class Fun(Cog):
             if response.status == 200:
                 joke = await response.json()
                 await ctx.send(joke["joke"])
+            else:
+                await ctx.send(f"Error: {response.status}")
 
     @command(name="fact")
     async def animal_fact(self, ctx, animal: str):
