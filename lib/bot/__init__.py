@@ -1,19 +1,19 @@
 from asyncio import sleep
-from discord.ext.commands import Bot as BotBase
+
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord import Intents
 from discord.errors import Forbidden
+from discord.ext.commands import Bot as BotBase
 from discord.ext.commands import CommandNotFound, Context, BadArgument, MissingRequiredArgument
 from discord.ext.commands import CommandOnCooldown, CheckFailure
-from ..db import db
-from glob import glob
 
+from ..cogs import fun, info, mod, quotes, reactions
+from ..db import db
 
 PREFIX = ">"
 OWNER_IDS = [114656846664564740]
-# CONSIDER OS DIFFERENCES
-# import os maybe
-COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
+# TODO: Think of a nicer way to refactor this importing
+COGS = [fun, info, mod, quotes, reactions]
 IGNORE_EXCEPTIONS = (CommandNotFound, BadArgument)
 
 
