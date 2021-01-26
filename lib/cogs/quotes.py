@@ -20,10 +20,11 @@ class Quotes(Cog):
         await ctx.send(embed=embed)
 
     @command(name="addquote", aliases=["aq"])
-    async def addquote(self, ctx, quote_str: str):
-        quote, author = quote_str.split("$")
+    async def addquote(self, ctx, *, quote_str: str):
+        quote, author = (str(term) for term in quote_str.split("$"))
         db.execute("INSERT INTO quotes (Quote, Author, UserID) VALUES(?, ?, ?)",
                    quote, author, ctx.author.id)
+        await ctx.send("Quote added.")
 
     @Cog.listener()
     async def on_ready(self):
