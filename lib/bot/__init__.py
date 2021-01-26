@@ -1,19 +1,22 @@
+import os
 from asyncio import sleep
-
+from discord.ext.commands import Bot as BotBase
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord import Intents
 from discord.errors import Forbidden
-from discord.ext.commands import Bot as BotBase
 from discord.ext.commands import CommandNotFound, Context, BadArgument, MissingRequiredArgument
 from discord.ext.commands import CommandOnCooldown, CheckFailure
 
-from ..cogs import fun, info, mod, quotes, reactions
 from ..db import db
+
 
 PREFIX = ">"
 OWNER_IDS = [114656846664564740]
-# TODO: Think of a nicer way to refactor this importing
-COGS = [fun, info, mod, quotes, reactions]
+COGS = []
+
+for _, _, files in os.walk(os.path.join('lib', 'cogs')):
+    COGS.extend([file.split(".py")[0] for file in files if file.endswith('.py') and not file.startswith('__')])
+
 IGNORE_EXCEPTIONS = (CommandNotFound, BadArgument)
 
 
@@ -57,7 +60,7 @@ class Bot(BotBase):
             self.TOKEN = tf.read()
 
         print("Running bot..")
-        super().run(self.TOKEN, reconnect=True)
+        super().run(self.TOKEN)
 
     async def process_commands(self, message):
         ctx = await self.get_context(message, cls=Context)
