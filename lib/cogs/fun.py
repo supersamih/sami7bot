@@ -39,18 +39,14 @@ class Fun(Cog):
         await ctx.message.delete()
         await ctx.send(message)
 
-    # @command(name="pokemon")
-    # async def pokemon(self, ctx):
-    #     randomnum = randint(0, 151)
-    #     pokemon = pb.pokemon(randomnum)
-    #     sprite = pb.SpriteResource('pokemon', randomnum)
-    #     pokeEmbed = Embed(title=pokemon.name.capitalize(), description="This is a pokemon")
-    #     pokeEmbed.set_image(url=sprite.url)
-    #     await ctx.send(embed=pokeEmbed)
 
     @command(name="nana")
     async def nana(self, ctx):
         await ctx.send(f'Did you know Nana is awesome, {ctx.author.mention} ?')
+
+    @command(name="mowafak")
+    async def mowafak(self, ctx):
+        await ctx.send(f'Mowafak is looking for a wife anyone available?')
 
     @command(name="saoie")
     async def saoie(self, ctx):
