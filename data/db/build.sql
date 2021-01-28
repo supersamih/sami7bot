@@ -24,5 +24,6 @@ CREATE TABLE IF NOT EXISTS pokemon (
 	PokeName TEXT,
 	PokeSprite TEXT,
 	Legendary BOOLEAN,
-	Mythical BOOLEAN
+	Mythical BOOLEAN,
+	Amount INTEGER DEFAULT 1
 );
