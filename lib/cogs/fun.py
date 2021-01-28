@@ -39,14 +39,13 @@ class Fun(Cog):
         await ctx.message.delete()
         await ctx.send(message)
 
-
     @command(name="nana")
     async def nana(self, ctx):
         await ctx.send(f'Did you know Nana is awesome, {ctx.author.mention} ?')
 
     @command(name="mowafak")
     async def mowafak(self, ctx):
-        await ctx.send(f'Mowafak is looking for a wife anyone available?')
+        await ctx.send('Mowafak is looking for a wife anyone available?')
 
     @command(name="saoie")
     async def saoie(self, ctx):

@@ -25,7 +25,7 @@ class Quotes(Cog):
         if "$" in quote_str:
             quote, author = (str(term) for term in quote_str.split("$"))
             db.execute("INSERT INTO quotes (Quote, Author, UserID) VALUES(?, ?, ?)",
-                    quote, author, ctx.author.id)
+                       quote, author, ctx.author.id)
             await ctx.send("Quote added.", delete_after=5)
         else:
             await ctx.send("Oops that didn't work make sure to use this format 'quote$author'", delete_after=5)
