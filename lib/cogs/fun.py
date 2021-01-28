@@ -2,7 +2,7 @@ from typing import Optional
 from discord.ext.commands import Cog, command, BadArgument
 # from discord.ext.commands import BucketType, cooldown
 from discord import Embed, Member
-from random import randint
+from random import randint, choice
 # import pokebase as pb
 from aiohttp import request
 
@@ -45,7 +45,11 @@ class Fun(Cog):
 
     @command(name="mowafak")
     async def mowafak(self, ctx):
-        await ctx.send('Mowafak is looking for a wife anyone available?')
+        mowafak_list = ["a life", "a wife", "a job", "a game partner", "his dick", "someone to bother",
+                        "someone to love", "someone to care", "a friend", "Samih to give a fuck",
+                        "his shirt", "a pound coin", "an open gym", "someone to make him a sandwich",
+                        "a drink", "a business plan"]
+        await ctx.send(f'Mowafak is looking for {choice(mowafak_list)}, can anyone help?')
 
     @command(name="saoie")
     async def saoie(self, ctx):

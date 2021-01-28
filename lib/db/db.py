@@ -8,6 +8,8 @@ BUILD_PATH = "./data/db/build.sql"
 cxn = connect(DB_PATH, check_same_thread=False)
 cur = cxn.cursor()
 
+# execute doesn't return anything, field returns a single cell, record returns a row (as a tuple), and records returns a list of rows
+
 
 def with_commit(func):
     def inner(*args, **kwargs):
