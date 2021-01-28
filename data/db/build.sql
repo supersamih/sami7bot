@@ -16,4 +16,13 @@ CREATE TABLE IF NOT EXISTS quotes (
     Quote  TEXT,
     Author TEXT,
     UserID INTEGER
-)
+);
+
+CREATE TABLE IF NOT EXISTS pokemon (
+	TrainerID INTEGER,
+	PokeID INTEGER,
+	PokeName TEXT,
+	PokeSprite TEXT,
+	Legendary BOOLEAN,
+	Mythical BOOLEAN
+);
