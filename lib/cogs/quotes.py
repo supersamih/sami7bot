@@ -1,4 +1,5 @@
-from discord.ext.commands import Cog, command
+from discord.ext.commands import Cog, command, has_permissions
+from discord.ext.commands import BucketType, cooldown
 from discord import Embed
 from ..db import db
 
@@ -8,8 +9,9 @@ class Quotes(Cog):
         self.bot = bot
 
     @command(name="wisdom", aliases=["quotes"])
+    @cooldown(1, 60, type=BucketType.guild)
     async def wisdom(self, ctx):
-        quote, author, user_id = db.record("SELECT Quote, Author, UserID FROM quotes order by RANDOM() LIMIT 1")
+        quote_id, quote, author, user_id = db.record("SELECT QuoteID, Quote, Author, UserID FROM quotes order by RANDOM() LIMIT 1")
         embed = Embed(title="Wisdom",
                       description=quote,
                       colour=0xF6AE2D)
@@ -17,6 +19,7 @@ class Quotes(Cog):
                   ("Submitted by", f"<@{user_id}>", False)]
         for name, value, inline in fields:
             embed.add_field(name=name, value=value, inline=inline)
+        embed.set_footer(text=f"{quote_id}")
         await ctx.send(embed=embed)
 
     @command(name="addquote", aliases=["aq"])
@@ -29,6 +32,36 @@ class Quotes(Cog):
             await ctx.send("Quote added.", delete_after=5)
         else:
             await ctx.send("Oops that didn't work make sure to use this format 'quote$author'", delete_after=5)
+
+    @command(name="deletequote", aliases=["dq"])
+    @has_permissions(manage_messages=True)
+    async def deletequote(self, ctx, q_id: int):
+        db.execute("DELETE FROM quotes WHERE QuoteID=?", q_id)
+        await ctx.send(f"Entry {q_id} deleted", delete_after=5)
+
+    @command(name="forcequote", aliases=["fq"])
+    @has_permissions(manage_messages=True)
+    async def forcequote(self, ctx, q_id: int):
+        try:
+            quote, author, user_id = db.record("SELECT Quote, Author, UserID FROM quotes where QuoteID=?", q_id)
+        except TypeError:
+            await ctx.send("That doesn't exist m8", delete_after=5)
+        else:
+            embed = Embed(title="Wisdom",
+                          description=quote,
+                          colour=0xF6AE2D)
+            fields = [("Author", author, False),
+                      ("Submitted by", f"<@{user_id}>", False)]
+            for name, value, inline in fields:
+                embed.add_field(name=name, value=value, inline=inline)
+            embed.set_footer(text=f"{q_id}")
+            await ctx.send(embed=embed)
+
+    @command(name="listids", aliases=["lids"])
+    @has_permissions(manage_messages=True)
+    async def listids(self, ctx):
+        all_qids = db.records("SELECT QuoteID from quotes")
+        await ctx.send(all_qids)
 
     @Cog.listener()
     async def on_ready(self):
