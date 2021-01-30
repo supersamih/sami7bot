@@ -95,7 +95,11 @@ class Bot(BotBase):
             await ctx.send("One or more required arguments missing")
 
         elif isinstance(exc, CommandOnCooldown):
-            await ctx.send(f"You can't use this command for {exc.retry_after:,.2f} seconds.")
+            m, s = divmod(exc.retry_after, 60)
+            if m:
+                await ctx.send(f"You can't use this command for {int(m)} minutes and {int(s)} seconds.")
+            else:
+                await ctx.send(f"You can't use this command for {int(s)} seconds.")
 
         elif hasattr(exc, "original"):
 
