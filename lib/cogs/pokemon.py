@@ -67,15 +67,17 @@ class Pokemon(Cog):
         pokeEmbed = await ctx.send(embed=embed)
         await Message.add_reaction(pokeEmbed, "◀️")
         await Message.add_reaction(pokeEmbed, "▶️")
+        await Message.add_reaction(pokeEmbed, "❌")
 
         def check(reaction, user):
-            return str(reaction.emoji) in ["◀️", "▶️"] and user != self.bot.user
+            return str(reaction.emoji) in ["◀️", "▶️", "❌"] and user != self.bot.user
         loop = 1
         while loop:
             try:
                 reaction, user = await self.bot.wait_for('reaction_add', timeout=30, check=check)
             except asyncio.TimeoutError:
-                await ctx.channel.send(f"{target.name}'s Session expired", delete_after=5)
+                embed.set_footer(text="Session finished")
+                await pokeEmbed.edit(embed=embed)
                 loop = 0
             else:
                 if str(reaction.emoji) == "◀️":
@@ -94,6 +96,10 @@ class Pokemon(Cog):
                                       description=separator.join(desc[x:y]))
                         embed.set_thumbnail(url="https://cdn.bulbagarden.net/upload/9/9f/Key_Pok%C3%A9dex_m_Sprite.png")
                         await pokeEmbed.edit(embed=embed)
+                if str(reaction.emoji) == "❌":
+                    embed.set_footer(text="Session finished")
+                    await pokeEmbed.edit(embed=embed)
+                    loop = 0
 
     @Cog.listener()
     async def on_ready(self):
