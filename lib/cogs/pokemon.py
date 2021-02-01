@@ -10,9 +10,6 @@ import asyncio
 from ..bot import functions
 
 
-allowed_channels = []
-
-
 class Pokemon(Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -126,9 +123,6 @@ class Pokemon(Cog):
     @command(name="leaderboard", aliases=["lb"])
     @functions.is_in_channel(805615557088378930)
     async def leaderboard(self, ctx):
-        if ctx.channel.id not in allowed_channels:
-            await ctx.send("wrong channel m8")
-            return
         x = 0
         y = 25
         lbDescrption = ["Trainer - Legendaries+\n"]
