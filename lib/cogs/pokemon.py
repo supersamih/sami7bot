@@ -46,7 +46,7 @@ class Pokemon(Cog):
                 else:
                     embed.set_image(url=sprite)
                 if legendary or mythical:
-                    embed.add_field(name="WOW you caught a", value=f"{name.upper()}!!", inline=False)
+                    embed.add_field(name="\u200b", value=f"**WOW!** You caught a **LEGENDARY {name.upper()}!**", inline=False)
                 await ctx.send(embed=embed)
                 checkID = db.record("SELECT PokeID FROM pokemon WHERE TrainerID = ? AND PokeID = ?", ctx.author.id, number) or 0
                 if checkID != 0:
