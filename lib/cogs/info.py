@@ -1,13 +1,20 @@
-from discord.ext.commands import Cog, command
+from discord.ext.commands import Cog, command, check
 from discord import Embed, Member
 from typing import Optional
 from datetime import datetime
+
+
+def in_philosophy():
+    async def predicate(ctx):
+        return ctx.guild and ctx.guild.id == 696423795128402023
+    return check(predicate)
 
 
 class Info(Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @in_philosophy()
     @command(name="userinfo")
     async def user_info(self, ctx, target: Optional[Member]):
         target = target or ctx.author
@@ -31,6 +38,7 @@ class Info(Cog):
             embed.add_field(name=name, value=value, inline=inline)
         await ctx.send(embed=embed)
 
+    @in_philosophy()
     @command(name="serverinfo")
     async def server_info(self, ctx):
         embed = Embed(title="Server Information",
