@@ -1,13 +1,20 @@
-from discord.ext.commands import Cog, command, has_permissions
+from discord.ext.commands import Cog, command, has_permissions, check
 from discord.ext.commands import BucketType, cooldown
 from discord import Embed
 from ..db import db
+
+
+def in_philosophy():
+    async def predicate(ctx):
+        return ctx.guild and ctx.guild.id == 696423795128402023
+    return check(predicate)
 
 
 class Quotes(Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @in_philosophy()
     @command(name="wisdom", aliases=["quotes"])
     @cooldown(1, 60, type=BucketType.guild)
     async def wisdom(self, ctx):
@@ -22,6 +29,7 @@ class Quotes(Cog):
         embed.set_footer(text=f"{quote_id}")
         await ctx.send(embed=embed)
 
+    @in_philosophy()
     @command(name="addquote", aliases=["aq"])
     async def addquote(self, ctx, *, quote_str: str):
         await ctx.message.delete()
@@ -33,12 +41,14 @@ class Quotes(Cog):
         else:
             await ctx.send("Oops that didn't work make sure to use this format 'quote$author'", delete_after=5)
 
+    @in_philosophy()
     @command(name="deletequote", aliases=["dq"])
     @has_permissions(manage_messages=True)
     async def deletequote(self, ctx, q_id: int):
         db.execute("DELETE FROM quotes WHERE QuoteID=?", q_id)
         await ctx.send(f"Entry {q_id} deleted", delete_after=5)
 
+    @in_philosophy()
     @command(name="forcequote", aliases=["fq"])
     @has_permissions(manage_messages=True)
     async def forcequote(self, ctx, q_id: int):
@@ -57,6 +67,7 @@ class Quotes(Cog):
             embed.set_footer(text=f"{q_id}")
             await ctx.send(embed=embed)
 
+    @in_philosophy()
     @command(name="listids", aliases=["lids"])
     @has_permissions(manage_messages=True)
     async def listids(self, ctx):

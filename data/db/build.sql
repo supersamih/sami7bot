@@ -27,3 +27,12 @@ CREATE TABLE IF NOT EXISTS pokemon (
 	Mythical BOOLEAN,
 	Amount INTEGER DEFAULT 1
 );
+
+CREATE TABLE IF NOT EXISTS leaderboard(
+	TrainerID INTEGER PRIMARY KEY,
+	Pokemon INTEGER,
+	Shinies INTEGER,
+	Legendaries INTEGER,
+	Mythicals INTEGER,
+	Total INTEGER
+);
