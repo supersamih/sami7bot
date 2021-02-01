@@ -98,11 +98,11 @@ class Bot(BotBase):
             m, s = divmod(exc.retry_after, 60)
             h, m = divmod(m, 60)
             if h:
-                await ctx.send(f"You can catch another pokemon in **{int(h)} hrs {int(m)} mins** and **{int(s)} secs.**")
+                await ctx.send(f"You can use this command again in **{int(h)} hrs {int(m)} mins** and **{int(s)} secs.**")
             elif m:
-                await ctx.send(f"You can catch another pokemon in **{int(m)} mins** and **{int(s)} secs.**")
+                await ctx.send(f"You can use this command again in **{int(m)} mins** and **{int(s)} secs.**")
             else:
-                await ctx.send(f"You can catch another pokemon in **{int(s)} secs.**")
+                await ctx.send(f"You can use this command again in **{int(s)} secs.**")
 
         elif hasattr(exc, "original"):
 
