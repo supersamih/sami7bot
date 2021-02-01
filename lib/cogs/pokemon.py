@@ -8,7 +8,7 @@ from typing import Optional
 from discord import Member
 import asyncio
 
-allowed_channels = [795266352381820978]
+allowed_channels = [805615557088378930]
 
 
 class Pokemon(Cog):
