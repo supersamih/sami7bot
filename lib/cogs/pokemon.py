@@ -7,8 +7,10 @@ from discord.ext.commands import BucketType, cooldown
 from typing import Optional
 from discord import Member
 import asyncio
+from ..bot import functions
 
-allowed_channels = [805615557088378930]
+
+allowed_channels = []
 
 
 class Pokemon(Cog):
@@ -16,12 +18,9 @@ class Pokemon(Cog):
         self.bot = bot
 
     @command(name="pokeroll", aliases=["pr", "poke", "pokemon"])
+    @functions.is_in_channel(805615557088378930)
     @cooldown(1, 10800, type=BucketType.member)
     async def pokeroll(self, ctx):
-        if ctx.channel.id not in allowed_channels:
-            await ctx.send("wrong channel m8")
-            return
-
         URL = f"https://pokeapi.glitch.me/v1/pokemon/{randint(1,386)}"
         async with request("GET", URL) as response:
             if response.status == 200:
@@ -65,11 +64,8 @@ class Pokemon(Cog):
                 await ctx.send(f"Oh no something went wrong, {response.status} Its Glimpee's fault")
 
     @command(name="pokedex", aliases=["pd"])
+    @functions.is_in_channel(805615557088378930)
     async def pokedex(self, ctx, target: Optional[Member]):
-        if ctx.channel.id not in allowed_channels:
-            await ctx.send("wrong channel m8")
-            return
-
         target = target or ctx.author
         desc = []
         leg_count = 0
@@ -128,6 +124,7 @@ class Pokemon(Cog):
                     loop = 0
 
     @command(name="leaderboard", aliases=["lb"])
+    @functions.is_in_channel(805615557088378930)
     async def leaderboard(self, ctx):
         if ctx.channel.id not in allowed_channels:
             await ctx.send("wrong channel m8")
@@ -179,10 +176,8 @@ class Pokemon(Cog):
 
     @command(name="clearpokemon")
     @has_permissions(manage_messages=True)
+    @functions.is_in_channel(803393663832293406)
     async def clearpokemon(self, ctx):
-        if ctx.channel.id != 803393663832293406:
-            await ctx.send("WHAT ARE YOU TRYING TO DO M8???")
-            return
         db.execute("DELETE FROM pokemon")
         db.execute("DELETE FROM leaderboard")
         await ctx.send("Pokemon database cleared")

@@ -1,23 +1,18 @@
 from typing import Optional
-from discord.ext.commands import Cog, command, has_permissions, check
+from discord.ext.commands import Cog, command, has_permissions
 # from discord.ext.commands import BucketType, cooldown
 from discord import Embed
 from random import choice
 # import pokebase as pb
 from aiohttp import request
-
-
-def in_philosophy():
-    async def predicate(ctx):
-        return ctx.guild and ctx.guild.id == 696423795128402023
-    return check(predicate)
+from ..bot import functions
 
 
 class Fun(Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @in_philosophy()
+    @functions.in_philosophy()
     @command(name="love", aliases=["7b", "ashk"])
     async def love(self, ctx):
         await ctx.send(f"I love you {ctx.author.mention} :heart:")
@@ -41,7 +36,7 @@ class Fun(Cog):
     #     if isinstance(exc, BadArgument):
     #         await ctx.send("That guy isn't here")
 
-    @in_philosophy()
+    @functions.in_philosophy()
     @command(name="echo", aliases=["say"])
     @has_permissions(manage_messages=True)
     async def echo_message(self, ctx, *, message):
@@ -52,7 +47,7 @@ class Fun(Cog):
     async def nana(self, ctx):
         await ctx.send(f'Did you know Nana is awesome, {ctx.author.mention} ?')
 
-    @in_philosophy()
+    @functions.in_philosophy()
     @command(name="mowafak")
     async def mowafak(self, ctx):
         mowafak_list = ["a life", "a wife", "a job", "a game partner", "his dick", "someone to bother",
@@ -65,7 +60,7 @@ class Fun(Cog):
     async def saoie(self, ctx):
         await ctx.send("Nana's wife <:saoiePeek:759791733490843648>")
 
-    @in_philosophy()
+    @functions.in_philosophy()
     @command(name="joke")
     async def joke(self, ctx):
         URL = "https://some-random-api.ml/joke"
@@ -102,7 +97,7 @@ class Fun(Cog):
     #     else:
     #         await ctx.send("Oops didn't work: Pick from cat, dog, panda, fox, koala and bird")
 
-    @in_philosophy()
+    @functions.in_philosophy()
     @command(name="pikachu")
     async def pikachu(self, ctx):
         URL = "https://some-random-api.ml/img/pikachu"
@@ -116,7 +111,7 @@ class Fun(Cog):
             else:
                 await ctx.send(f"Oops didn't work: {response.status}")
 
-    @in_philosophy()
+    @functions.in_philosophy()
     @command(name="doggo")
     async def doggo(self, ctx, breed: Optional[str]):
         if breed:
