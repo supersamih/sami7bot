@@ -89,7 +89,7 @@ class Bot(BotBase):
             pass
 
         elif isinstance(exc, CheckFailure):
-            await ctx.send("You don't have permission to do this...\nNaughty naughty")
+            await ctx.send("You don't have permission to do this.\nNaughty naughty")
 
         elif isinstance(exc, MissingRequiredArgument):
             await ctx.send("One or more required arguments missing")
