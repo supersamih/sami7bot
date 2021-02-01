@@ -184,6 +184,7 @@ class Pokemon(Cog):
             await ctx.send("WHAT ARE YOU TRYING TO DO M8???")
             return
         db.execute("DELETE FROM pokemon")
+        db.execute("DELETE FROM leaderboard")
         await ctx.send("Pokemon database cleared")
 
     @Cog.listener()
