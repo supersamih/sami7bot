@@ -68,7 +68,7 @@ class Pokemon(Cog):
         leg_count = 0
         mythical_count = 0
         x = 0
-        y = 25
+        y = 10
         pd = db.records("SELECT PokeID, PokeName, Legendary, Mythical, Amount FROM pokemon WHERE TrainerID = ?", target.id)
         pd.sort(key=lambda x: x[0])
         for record in pd:
@@ -100,17 +100,17 @@ class Pokemon(Cog):
                 loop = 0
             else:
                 if str(reaction.emoji) == "◀️":
-                    if x - 25 >= 0:
-                        x -= 25
-                        y -= 25
+                    if x - 10 >= 0:
+                        x -= 10
+                        y -= 10
                         embed = Embed(title=f"{target.name}'s Pokedex",
                                       description="\n".join(desc[x:y]))
                         embed.set_thumbnail(url="https://cdn.bulbagarden.net/upload/9/9f/Key_Pok%C3%A9dex_m_Sprite.png")
                         await pokeEmbed.edit(embed=embed)
                 if str(reaction.emoji) == "▶️":
-                    if y + 25 <= len(pd) + 25:
-                        x += 25
-                        y += 25
+                    if y + 10 <= len(pd) + 10:
+                        x += 10
+                        y += 10
                         embed = Embed(title=f"{target.name}'s Pokedex",
                                       description="\n".join(desc[x:y]))
                         embed.set_thumbnail(url="https://cdn.bulbagarden.net/upload/9/9f/Key_Pok%C3%A9dex_m_Sprite.png")
@@ -124,7 +124,7 @@ class Pokemon(Cog):
     @functions.is_in_channel(805615557088378930)
     async def leaderboard(self, ctx):
         x = 0
-        y = 25
+        y = 10
         lbDescrption = ["Trainer - Legendaries+\n"]
         lb = db.records("SELECT TrainerID, Legendaries, Mythicals, Total from leaderboard")
         lb.sort(key=lambda x: x[3], reverse=True)
@@ -150,16 +150,16 @@ class Pokemon(Cog):
                 loop = 0
             else:
                 if str(reaction.emoji) == "◀️":
-                    if x - 25 >= 0:
-                        x -= 25
-                        y -= 25
+                    if x - 10 >= 0:
+                        x -= 10
+                        y -= 10
                         embed = Embed(title="Leaderboard",
                                       description="\n".join(lbDescrption[x:y]))
                         await lbEmbed.edit(embed=embed)
                 if str(reaction.emoji) == "▶️":
-                    if y + 25 <= len(lb) + 25:
-                        x += 25
-                        y += 25
+                    if y + 10 <= len(lb) + 10:
+                        x += 10
+                        y += 10
                         embed = Embed(title="Leaderboard",
                                       description="\n".join(lbDescrption[x:y]))
                         await lbEmbed.edit(embed=embed)
