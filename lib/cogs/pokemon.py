@@ -16,7 +16,7 @@ class Pokemon(Cog):
 
     @command(name="pokeroll", aliases=["pr", "poke", "pokemon"])
     @functions.is_in_channel(805615557088378930)
-    @cooldown(1, 15800, type=BucketType.member)
+    @cooldown(1, 10800, type=BucketType.member)
     async def pokeroll(self, ctx):
         URL = f"https://pokeapi.glitch.me/v1/pokemon/{randint(1,386)}"
         async with request("GET", URL) as response:
@@ -27,7 +27,7 @@ class Pokemon(Cog):
                 number = data[0]["number"]
                 legendary = data[0]["legendary"]
                 mythical = data[0]["mythical"]
-                if randint(1, 15000) <= 150:
+                if randint(1, 10000) <= 100:
                     shiny = "Shiny"
                     shinydb = True
                 else:
