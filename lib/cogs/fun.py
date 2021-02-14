@@ -71,31 +71,30 @@ class Fun(Cog):
             else:
                 await ctx.send(f"Error: {response.status}")
 
-    # @command(name="fact")
-    # async def animal_fact(self, ctx, animal: str):
-    #     if (animal := animal.lower()) in ["cat", "dog", "panda", "fox", "bird", "koala"]:
-    #         fact_url = f"https://some-random-api.ml/facts/{animal}"
-    #         image_url = f"https://some-random-api.ml/img/{'birb' if animal == 'bird' else animal}"
-    #         async with request("GET", image_url) as response:
-    #             if response.status == 200:
-    #                 data = await response.json()
-    #                 image_link = data["link"]
-    #             else:
-    #                 image_link = None
-
-    #         async with request("GET", fact_url, headers={}) as response:
-    #             if response.status == 200:
-    #                 data = await response.json()
-    #                 embed = Embed(title=f"{animal.title().capitalize()} Fact",
-    #                               description=data["fact"],
-    #                               colour=0xF6AE2D)
-    #                 if image_link is not None:
-    #                     embed.set_image(url=image_link)
-    #                 await ctx.send(embed=embed)
-    #             else:
-    #                 await ctx.send(f"Oops didn't work: {response.status}")
-    #     else:
-    #         await ctx.send("Oops didn't work: Pick from cat, dog, panda, fox, koala and bird")
+    @command(name="fact")
+    async def animal_fact(self, ctx, animal: str):
+        if (animal := animal.lower()) in ["cat", "dog", "panda", "fox", "bird", "koala"]:
+            fact_url = f"https://some-random-api.ml/facts/{animal}"
+            image_url = f"https://some-random-api.ml/img/{'birb' if animal == 'bird' else animal}"
+            async with request("GET", image_url) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    image_link = data["link"]
+                else:
+                    image_link = None
+            async with request("GET", fact_url, headers={}) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    embed = Embed(title=f"{animal.title().capitalize()} Fact",
+                                  description=data["fact"],
+                                  colour=0xF6AE2D)
+                    if image_link is not None:
+                        embed.set_image(url=image_link)
+                    await ctx.send(embed=embed)
+                else:
+                    await ctx.send(f"Oops didn't work: {response.status}")
+        else:
+            await ctx.send("Oops didn't work: Pick from cat, dog, panda, fox, koala and bird")
 
     @functions.in_philosophy()
     @command(name="pikachu")

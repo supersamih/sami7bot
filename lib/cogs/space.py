@@ -19,11 +19,12 @@ class Space(Cog):
                 data = await response.json()
                 title = data["title"]
                 description = data["explanation"]
-                image_url = data["hdurl"]
                 date = data["date"]
                 embed = Embed(title=title, description=description, colour=0xF6AE2D)
                 embed.add_field(name="Date: ", value=date, inline=False)
-                embed.set_image(url=image_url)
+                if data["media_type"] == "image":
+                    image_url = data["hdurl"]
+                    embed.set_image(url=image_url)
                 await message_channel.send(embed=embed)
             else:
                 await message_channel.send(f"Oops didn't work: {response.status}")
