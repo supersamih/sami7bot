@@ -6,7 +6,6 @@ from random import randint
 from discord.ext.commands import BucketType, cooldown
 from typing import Optional
 from discord import Member
-import asyncio
 from ..bot import functions
 
 
@@ -15,7 +14,7 @@ class Pokemon(Cog):
         self.bot = bot
 
     @command(name="pokeroll", aliases=["pr", "poke", "pokemon"])
-    @functions.is_in_channel(805615557088378930)
+    # @functions.is_in_channel(805615557088378930)
     @cooldown(1, 10800, type=BucketType.member)
     async def pokeroll(self, ctx):
         URL = f"https://pokeapi.glitch.me/v1/pokemon/{randint(1,386)}"
@@ -41,6 +40,7 @@ class Pokemon(Cog):
                     embed.set_image(url=shinyurl)
                 else:
                     embed.set_image(url=sprite)
+                    print(embed.image)
                 if legendary or mythical:
                     embed.add_field(name="\u200b", value=f"**WOW!** You caught a **LEGENDARY {name.upper()}!**", inline=False)
                 await ctx.send(embed=embed)
@@ -61,7 +61,7 @@ class Pokemon(Cog):
                 await ctx.send(f"Oh no something went wrong, {response.status} Its Glimpee's fault")
 
     @command(name="pokedex", aliases=["pd"])
-    @functions.is_in_channel(805615557088378930)
+    # @functions.is_in_channel(805615557088378930)
     async def pokedex(self, ctx, target: Optional[Member]):
         target = target or ctx.author
         desc = []
@@ -80,97 +80,64 @@ class Pokemon(Cog):
         desc.insert(0, f"**Uniques: {len(pd)}\nLegendaries: {leg_count}\nMythicals: {mythical_count}**")
         embed = Embed(title=f"{target.name}'s Pokedex",
                       description="\n".join(desc[x:y]),
-                      colour=ctx.author.colour
+                      colour=16711680,
                       )
         embed.set_thumbnail(url="https://cdn.bulbagarden.net/upload/9/9f/Key_Pok%C3%A9dex_m_Sprite.png")
         pokeEmbed = await ctx.send(embed=embed)
         await Message.add_reaction(pokeEmbed, "◀️")
         await Message.add_reaction(pokeEmbed, "▶️")
         await Message.add_reaction(pokeEmbed, "❌")
-
-        def check(reaction, user):
-            return str(reaction.emoji) in ["◀️", "▶️", "❌"] and user != self.bot.user
-        loop = 1
-        while loop:
-            try:
-                reaction, user = await self.bot.wait_for('reaction_add', timeout=30, check=check)
-            except asyncio.TimeoutError:
-                embed.set_footer(text="Session finished")
-                await pokeEmbed.edit(embed=embed)
-                loop = 0
-            else:
-                if str(reaction.emoji) == "◀️":
-                    if x - 15 >= 0:
-                        x -= 15
-                        y -= 15
-                        embed = Embed(title=f"{target.name}'s Pokedex",
-                                      description="\n".join(desc[x:y]))
-                        embed.set_thumbnail(url="https://cdn.bulbagarden.net/upload/9/9f/Key_Pok%C3%A9dex_m_Sprite.png")
-                        await pokeEmbed.edit(embed=embed)
-                if str(reaction.emoji) == "▶️":
-                    if y + 15 <= len(pd) + 15:
-                        x += 15
-                        y += 15
-                        embed = Embed(title=f"{target.name}'s Pokedex",
-                                      description="\n".join(desc[x:y]))
-                        embed.set_thumbnail(url="https://cdn.bulbagarden.net/upload/9/9f/Key_Pok%C3%A9dex_m_Sprite.png")
-                        await pokeEmbed.edit(embed=embed)
-                if str(reaction.emoji) == "❌":
-                    embed.set_footer(text="Session finished")
-                    await pokeEmbed.edit(embed=embed)
-                    loop = 0
+        await functions.embed_cycler(self, embed, pokeEmbed, desc)
 
     @command(name="leaderboard", aliases=["lb"])
-    @functions.is_in_channel(805615557088378930)
-    async def leaderboard(self, ctx):
-        x = 0
-        y = 15
-        lbDescrption = ["Trainer - Legendaries+\n"]
-        lb = db.records("SELECT TrainerID, Legendaries, Mythicals, Total from leaderboard")
-        lb.sort(key=lambda x: x[3], reverse=True)
-        for record in lb:
-            lbDescrption.append(f"<@{record[0]}> - {record[3]}")
-        embed = Embed(title="Leaderboard",
-                      description="\n".join(lbDescrption[x:y]))
-        lbEmbed = await ctx.send(embed=embed)
-        await Message.add_reaction(lbEmbed, "◀️")
-        await Message.add_reaction(lbEmbed, "▶️")
-        await Message.add_reaction(lbEmbed, "❌")
-
-        def check(reaction, user):
-            return str(reaction.emoji) in ["◀️", "▶️", "❌"] and user != self.bot.user
-
-        loop = 1
-        while loop:
-            try:
-                reaction, user = await self.bot.wait_for('reaction_add', timeout=30, check=check)
-            except asyncio.TimeoutError:
-                embed.set_footer(text="Session finished")
-                await lbEmbed.edit(embed=embed)
-                loop = 0
-            else:
-                if str(reaction.emoji) == "◀️":
-                    if x - 15 >= 0:
-                        x -= 15
-                        y -= 15
-                        embed = Embed(title="Leaderboard",
-                                      description="\n".join(lbDescrption[x:y]))
-                        await lbEmbed.edit(embed=embed)
-                if str(reaction.emoji) == "▶️":
-                    if y + 15 <= len(lb) + 15:
-                        x += 15
-                        y += 15
-                        embed = Embed(title="Leaderboard",
-                                      description="\n".join(lbDescrption[x:y]))
-                        await lbEmbed.edit(embed=embed)
-                if str(reaction.emoji) == "❌":
-                    embed.set_footer(text="Session finished")
-                    await lbEmbed.edit(embed=embed)
-                    loop = 0
+    # @functions.is_in_channel(805615557088378930)
+    async def leaderboard(self, ctx, _type: Optional[str]):
+        _type = _type or "l"
+        if (_type := _type.lower()) in ["l", "legendary", "s", "shiny", "p", "pokemon"]:
+            if (_type := _type.lower()) in ["l", "legendary"]:
+                x = 0
+                y = 15
+                lbDescrption = ["Trainer - Legendaries\n"]
+                lb = db.records("SELECT TrainerID, Total from leaderboard")
+                lb.sort(key=lambda x: x[1], reverse=True)
+                for record in lb:
+                    lbDescrption.append(f"<@{record[0]}> - {record[1]}")
+                embed = Embed(title="Leaderboard",
+                              description="\n".join(lbDescrption[x:y]),
+                              colour=ctx.author.colour)
+            elif (_type := _type.lower()) in ["p", "pokemon"]:
+                x = 0
+                y = 15
+                lbDescrption = ["Trainer - Pokemon\n"]
+                lb = db.records("SELECT TrainerID, Pokemon from leaderboard")
+                lb.sort(key=lambda x: x[1], reverse=True)
+                for record in lb:
+                    lbDescrption.append(f"<@{record[0]}> - {record[1]}")
+                embed = Embed(title="Leaderboard",
+                              description="\n".join(lbDescrption[x:y]),
+                              colour=ctx.author.colour)
+            elif (_type := _type.lower()) in ["s", "shiny"]:
+                x = 0
+                y = 15
+                lbDescrption = ["Trainer - Shinies\n"]
+                lb = db.records("SELECT TrainerID, Shinies from leaderboard")
+                lb.sort(key=lambda x: x[1], reverse=True)
+                for record in lb:
+                    lbDescrption.append(f"<@{record[0]}> - {record[1]}")
+                embed = Embed(title="Leaderboard",
+                              description="\n".join(lbDescrption[x:y]),
+                              colour=ctx.author.colour)
+            lbEmbed = await ctx.send(embed=embed)
+            await Message.add_reaction(lbEmbed, "◀️")
+            await Message.add_reaction(lbEmbed, "▶️")
+            await Message.add_reaction(lbEmbed, "❌")
+            await functions.embed_cycler(self, embed, lbEmbed, lbDescrption)
+        else:
+            await ctx.send("To access the leaderboards do >lb with either p, s or l as the command.\n```Like this >lb p```")
 
     @command(name="clearpokemon")
     @has_permissions(manage_messages=True)
-    @functions.is_in_channel(803393663832293406)
+    # @functions.is_in_channel(803393663832293406)
     async def clearpokemon(self, ctx):
         db.execute("DELETE FROM pokemon")
         db.execute("DELETE FROM leaderboard")
