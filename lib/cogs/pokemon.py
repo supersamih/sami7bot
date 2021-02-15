@@ -40,7 +40,6 @@ class Pokemon(Cog):
                     embed.set_image(url=shinyurl)
                 else:
                     embed.set_image(url=sprite)
-                    print(embed.image)
                 if legendary or mythical:
                     embed.add_field(name="\u200b", value=f"**WOW!** You caught a **LEGENDARY {name.upper()}!**", inline=False)
                 await ctx.send(embed=embed)
@@ -90,7 +89,6 @@ class Pokemon(Cog):
         await functions.embed_cycler(self, embed, pokeEmbed, desc)
 
     @command(name="leaderboard", aliases=["lb"])
-    @functions.is_in_channel(805615557088378930)
     async def leaderboard(self, ctx, _type: Optional[str]):
         _type = _type or "l"
         if (_type := _type.lower()) in ["l", "legendary", "s", "shiny", "p", "pokemon"]:
