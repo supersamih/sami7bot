@@ -21,11 +21,7 @@ class Pokemon(Cog):
         async with request("GET", URL) as response:
             if response.status == 200:
                 data = await response.json()
-                name = data[0]["name"]
-                sprite = data[0]["sprite"]
-                number = data[0]["number"]
-                legendary = data[0]["legendary"]
-                mythical = data[0]["mythical"]
+                name, sprite, number, legendary, mythical = data[0]["name"], data[0]["sprite"], data[0]["number"], data[0]["legendary"], data[0]["mythical"]
                 if randint(1, 10000) <= 100:
                     shiny = "Shiny"
                     shinydb = True
@@ -89,6 +85,7 @@ class Pokemon(Cog):
         await functions.embed_cycler(self, embed, pokeEmbed, desc)
 
     @command(name="leaderboard", aliases=["lb"])
+    @functions.is_in_channel(805615557088378930)
     async def leaderboard(self, ctx, _type: Optional[str]):
         _type = _type or "l"
         if (_type := _type.lower()) in ["l", "legendary", "s", "shiny", "p", "pokemon"]:
