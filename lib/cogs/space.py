@@ -11,8 +11,9 @@ class Space(Cog):
         self.scheduler = AsyncIOScheduler()
 
     async def NASA_DAILY(self):
+        with open("./lib/cogs/NASAapikey", "r", encoding="utf-8") as nak:
+            API_KEY = nak.read()
         message_channel = self.bot.get_channel(800693456015589376)
-        API_KEY = "3oSG6NpQdf7TyH9q6EameCeLbL2hQwkOyUYw2BPe"
         URL = f"https://api.nasa.gov/planetary/apod?api_key={API_KEY}"
         async with request("GET", URL) as response:
             if response.status == 200:
@@ -20,11 +21,14 @@ class Space(Cog):
                 title = data["title"]
                 description = data["explanation"]
                 date = data["date"]
-                embed = Embed(title=title, description=description, colour=0xF6AE2D)
-                embed.add_field(name="Date: ", value=date, inline=False)
                 if data["media_type"] == "image":
                     image_url = data["hdurl"]
-                    embed.set_image(url=image_url)
+                else:
+                    video_url = data["url"]
+                    description += f"\n{video_url}"
+                embed = Embed(title=title, description=description, colour=0xF6AE2D)
+                embed.add_field(name="Date: ", value=date, inline=False)
+                embed.set_image(url=image_url)
                 await message_channel.send(embed=embed)
             else:
                 await message_channel.send(f"Oops didn't work: {response.status}")

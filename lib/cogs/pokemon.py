@@ -14,18 +14,14 @@ class Pokemon(Cog):
         self.bot = bot
 
     @command(name="pokeroll", aliases=["pr", "poke", "pokemon"])
-    @functions.is_in_channel(805615557088378930)
+    @functions.is_in_channel(811239328415350805)
     @cooldown(1, 10800, type=BucketType.member)
     async def pokeroll(self, ctx):
         URL = f"https://pokeapi.glitch.me/v1/pokemon/{randint(1,386)}"
         async with request("GET", URL) as response:
             if response.status == 200:
                 data = await response.json()
-                name = data[0]["name"]
-                sprite = data[0]["sprite"]
-                number = data[0]["number"]
-                legendary = data[0]["legendary"]
-                mythical = data[0]["mythical"]
+                name, sprite, number, legendary, mythical = data[0]["name"], data[0]["sprite"], data[0]["number"], data[0]["legendary"], data[0]["mythical"]
                 if randint(1, 10000) <= 100:
                     shiny = "Shiny"
                     shinydb = True
@@ -60,7 +56,7 @@ class Pokemon(Cog):
                 await ctx.send(f"Oh no something went wrong, {response.status} Its Glimpee's fault")
 
     @command(name="pokedex", aliases=["pd"])
-    @functions.is_in_channel(805615557088378930)
+    @functions.is_in_channel(811239328415350805)
     async def pokedex(self, ctx, target: Optional[Member]):
         target = target or ctx.author
         desc = []

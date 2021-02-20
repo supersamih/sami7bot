@@ -128,5 +128,8 @@ TEST-**.xml
 # Discord Token
 token
 
+# NASA api key
+NASAapikey
+
 # Windows Executable
 *.exe

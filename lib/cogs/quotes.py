@@ -10,7 +10,7 @@ class Quotes(Cog):
         self.bot = bot
 
     @functions.in_philosophy()
-    @command(name="wisdom", aliases=["quotes"])
+    @command(name="wisdom", aliases=["quotes", "quote"])
     @cooldown(1, 60, type=BucketType.guild)
     async def wisdom(self, ctx):
         quote_id, quote, author, user_id = db.record("SELECT QuoteID, Quote, Author, UserID FROM quotes order by RANDOM() LIMIT 1")

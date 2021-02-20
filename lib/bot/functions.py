@@ -33,7 +33,8 @@ async def embed_cycler(self, embed, message, listDescription):
     y = 15
 
     def check(reaction, user):
-        return str(reaction.emoji) in ["◀️", "▶️", "❌"] and user != self.bot.user
+        if message.id == reaction.message.id:
+            return str(reaction.emoji) in ["◀️", "▶️", "❌"] and user != self.bot.user
 
     loop = 1
     while loop:
