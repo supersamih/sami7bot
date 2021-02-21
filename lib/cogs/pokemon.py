@@ -1,4 +1,4 @@
-from discord.ext.commands import Cog, command, has_permissions
+from discord.ext.commands import Cog, command, has_permissions, CommandOnCooldown
 from discord import Embed, Message
 from ..db import db
 from aiohttp import request
@@ -55,6 +55,18 @@ class Pokemon(Cog):
             else:
                 await ctx.send(f"Oh no something went wrong, {response.status} Its Glimpee's fault")
 
+    @pokeroll.error
+    async def pokeroll_error(self, ctx, exc):
+        if isinstance(exc, CommandOnCooldown):
+            m, s = divmod(exc.retry_after, 60)
+            h, m = divmod(m, 60)
+            if h:
+                await ctx.send(f"You can catch another pokemon in **{int(h)} hrs {int(m)} mins** and **{int(s)} secs.**")
+            elif m:
+                await ctx.send(f"You can catch another pokemon in **{int(m)} mins** and **{int(s)} secs.**")
+            else:
+                await ctx.send(f"You can catch another pokemon in **{int(s)} secs.**")
+
     @command(name="pokedex", aliases=["pd"])
     @functions.is_in_channel(805615557088378930)
     async def pokedex(self, ctx, target: Optional[Member]):
@@ -96,7 +108,8 @@ class Pokemon(Cog):
                 lb = db.records("SELECT TrainerID, Total from leaderboard")
                 lb.sort(key=lambda x: x[1], reverse=True)
                 for record in lb:
-                    lbDescrption.append(f"<@{record[0]}> - {record[1]}")
+                    rank = lb.index(record) + 1
+                    lbDescrption.append(f"**{rank}.** <@{record[0]}> - {record[1]}")
                 embed = Embed(title="Leaderboard",
                               description="\n".join(lbDescrption[x:y]),
                               colour=ctx.author.colour)
@@ -107,7 +120,8 @@ class Pokemon(Cog):
                 lb = db.records("SELECT TrainerID, Pokemon from leaderboard")
                 lb.sort(key=lambda x: x[1], reverse=True)
                 for record in lb:
-                    lbDescrption.append(f"<@{record[0]}> - {record[1]}")
+                    rank = lb.index(record) + 1
+                    lbDescrption.append(f"**{rank}.** <@{record[0]}> - {record[1]}")
                 embed = Embed(title="Leaderboard",
                               description="\n".join(lbDescrption[x:y]),
                               colour=ctx.author.colour)
@@ -118,7 +132,8 @@ class Pokemon(Cog):
                 lb = db.records("SELECT TrainerID, Shinies from leaderboard")
                 lb.sort(key=lambda x: x[1], reverse=True)
                 for record in lb:
-                    lbDescrption.append(f"<@{record[0]}> - {record[1]}")
+                    rank = lb.index(record) + 1
+                    lbDescrption.append(f"**{rank}.** <@{record[0]}> - {record[1]}")
                 embed = Embed(title="Leaderboard",
                               description="\n".join(lbDescrption[x:y]),
                               colour=ctx.author.colour)
