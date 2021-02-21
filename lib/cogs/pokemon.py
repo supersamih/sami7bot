@@ -14,7 +14,7 @@ class Pokemon(Cog):
         self.bot = bot
 
     @command(name="pokeroll", aliases=["pr", "poke", "pokemon"])
-    @functions.is_in_channel(811239328415350805)
+    @functions.is_in_channel(805615557088378930)
     @cooldown(1, 10800, type=BucketType.member)
     async def pokeroll(self, ctx):
         URL = f"https://pokeapi.glitch.me/v1/pokemon/{randint(1,386)}"
@@ -68,7 +68,7 @@ class Pokemon(Cog):
                 await ctx.send(f"You can catch another pokemon in **{int(s)} secs.**")
 
     @command(name="pokedex", aliases=["pd"])
-    @functions.is_in_channel(811239328415350805)
+    @functions.is_in_channel(805615557088378930)
     async def pokedex(self, ctx, target: Optional[Member]):
         target = target or ctx.author
         desc = []
@@ -97,6 +97,7 @@ class Pokemon(Cog):
         await functions.embed_cycler(self, embed, pokeEmbed, desc)
 
     @command(name="leaderboard", aliases=["lb"])
+    @functions.is_in_channel(805615557088378930)
     async def leaderboard(self, ctx, _type: Optional[str]):
         _type = _type or "l"
         if (_type := _type.lower()) in ["l", "legendary", "s", "shiny", "p", "pokemon"]:
