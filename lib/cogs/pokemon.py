@@ -1,5 +1,4 @@
 from discord.ext.commands import Cog, command, has_permissions
-# from discord.ext.commands import CommandOnCooldown
 from discord import Embed, Message
 from ..db import db
 from aiohttp import request
@@ -55,18 +54,6 @@ class Pokemon(Cog):
                                int(shinydb), int(legendary), int(mythical), int(legendary) + int(mythical), ctx.author.id)
             else:
                 await ctx.send(f"Oh no something went wrong, {response.status} Its Glimpee's fault")
-
-    # @pokeroll.error
-    # async def pokeroll_error(self, ctx, exc):
-    #     if isinstance(exc, CommandOnCooldown):
-    #         m, s = divmod(exc.retry_after, 60)
-    #         h, m = divmod(m, 60)
-    #         if h:
-    #             await ctx.send(f"You can catch another pokemon in **{int(h)} hrs {int(m)} mins** and **{int(s)} secs.**")
-    #         elif m:
-    #             await ctx.send(f"You can catch another pokemon in **{int(m)} mins** and **{int(s)} secs.**")
-    #         else:
-    #             await ctx.send(f"You can catch another pokemon in **{int(s)} secs.**")
 
     @command(name="pokedex", aliases=["pd"])
     @functions.is_in_channel(805615557088378930)
@@ -145,6 +132,72 @@ class Pokemon(Cog):
             await functions.embed_cycler(self, embed, lbEmbed, lbDescrption)
         else:
             await ctx.send("To access the leaderboards do >lb with either p, s or l as the command.\n```Like this >lb p```")
+
+    @command(name="grouppokedex", aliases=["gpd"])
+    @functions.is_in_channel(805615557088378930)
+    async def grouppokedex(self, ctx):
+        desc = [""]
+        leg_count = 0
+        mythical_count = 0
+        x = 0
+        y = 15
+        pd = db.records("SELECT PokeID, PokeName, SUM(Legendary), SUM(Mythical), SUM(Amount) FROM pokemon GROUP BY PokeID")
+        pd.sort(key=lambda x: x[0])
+        counter = 0
+        for record in pd:
+            counter += 1
+            if record[0] != counter:
+                print(counter)
+                counter = record[0]
+            if record[2]:
+                leg_count += 1
+            if record[3]:
+                mythical_count += 1
+            desc.append(f"{record[0]} - {record[1]} - {record[4]}x")
+            if counter != record[0]:
+                pass
+
+        desc.insert(0, f"**Pokemon: {len(pd)}/386\nLegendaries: {leg_count}/17\nMythicals: {mythical_count}/4**")
+        embed = Embed(title="Group Pokedex",
+                      description="\n".join(desc[x:y]),
+                      colour=16711680,
+                      )
+        embed.set_thumbnail(url="https://cdn.bulbagarden.net/upload/9/9f/Key_Pok%C3%A9dex_m_Sprite.png")
+        pokeEmbed = await ctx.send(embed=embed)
+        await Message.add_reaction(pokeEmbed, "◀️")
+        await Message.add_reaction(pokeEmbed, "▶️")
+        await Message.add_reaction(pokeEmbed, "❌")
+        await functions.embed_cycler(self, embed, pokeEmbed, desc)
+
+    @command(name="pokestats")
+    @functions.is_in_channel(805615557088378930)
+    async def pokestats(self, ctx):
+        pddata = db.records("SELECT PokeID, PokeName, SUM(Amount) FROM pokemon GROUP BY PokeID")
+        pddata.sort(key=lambda x: x[2])
+        mostdupesserver = pddata[-1]
+        mostpkmn = db.records("SELECT TrainerID, count(*) FROM pokemon GROUP BY TrainerID")
+        mostpkmn.sort(key=lambda x: x[1])
+        mostpokemon = mostpkmn[-1]
+        totalpokemon = len(pddata)
+        totalrolls = len(db.records("SELECT TrainerID FROM pokemon"))
+        mostdupesplayer = db.record("SELECT TrainerID, PokeID, PokeName, MAX(Amount) FROM Pokemon")
+        mostrolls = db.record("SELECT TrainerID, MAX(Pokemon) from leaderboard")
+        mostshinies = db.record("SELECT TrainerID, MAX(Shinies) from leaderboard")
+        mostlegendaries = db.record("SELECT TrainerID, MAX(Total) from leaderboard")
+        embed = Embed(title="Everyone loves statistics",
+                      description="Stats for the feburary event of Poggemon",
+                      colour=ctx.author.colour)
+        fields = [("Total rolls:", totalrolls, True),
+                  ("Total Pokemon:", f"{totalpokemon}/386", True),
+                  ("Most rolls:", f"<@{mostrolls[0]}> with {mostrolls[1]}! ", False),
+                  ("Most Unique pokemon:", f"<@{mostpokemon[0]}> with {mostpokemon[1]}! ", True),
+                  ("Most dupes (server):", f"Together the server caught {mostdupesserver[1]} {mostdupesserver[2]} times!", False),
+                  ("Most dupes (player):", f"<@{mostdupesplayer[0]}> with {mostdupesplayer[3]}x {mostdupesplayer[2]} ", True),
+                  ("Most Shinies:", f"<@{mostshinies[0]}> with {mostshinies[1]} Shinies!", False),
+                  ("Most Legendaries:", f"<@{mostlegendaries[0]}> with {mostlegendaries[1]} legendaries!", True)]
+        for name, value, inline in fields:
+            embed.add_field(name=name, value=value, inline=inline)
+        await ctx.send(embed=embed)
 
     @command(name="clearpokemon")
     @has_permissions(manage_messages=True)
