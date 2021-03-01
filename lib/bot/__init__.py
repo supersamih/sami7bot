@@ -1,11 +1,11 @@
 import os
 from asyncio import sleep
 from discord.ext.commands import Bot as BotBase
+from discord.ext.commands import CommandNotFound, Context, BadArgument, MissingRequiredArgument, CommandOnCooldown, CheckFailure
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from discord import Intents
+from discord import Intents, DMChannel, Embed
 from discord.errors import Forbidden
-from discord.ext.commands import CommandNotFound, Context, BadArgument, MissingRequiredArgument
-from discord.ext.commands import CommandOnCooldown, CheckFailure
+
 
 from ..db import db
 
@@ -130,6 +130,18 @@ class Bot(BotBase):
 
     async def on_message(self, message):
         if not message.author.bot:
+            if isinstance(message.channel, DMChannel):
+                if message.content.startswith(">secret"):
+                    finalmessage = message.content[7:]
+                    message_channel = bot.get_channel(778792559668625478)
+                    embed = Embed(title="Confession...",
+                                  description=finalmessage,
+                                  colour=0xFF69B4,)
+                    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/784183505625415700/815993484489523230/unknown.png")
+                    embed.set_footer(text="From: Secret")
+                    await message_channel.send(embed=embed)
+                else:
+                    await message.channel.send("Sorry, I don't understand what you want.\nIf you want to send a secret please start your message with >secret.")
             await self.process_commands(message)
 
 
