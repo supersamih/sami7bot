@@ -1,4 +1,4 @@
-from discord.ext.commands import Cog
+from discord.ext.commands import Cog, command
 from aiohttp import request
 from discord import Embed
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -10,7 +10,8 @@ class Space(Cog):
         self.bot = bot
         self.scheduler = AsyncIOScheduler()
 
-    async def NASA_DAILY(self):
+    @command(name="NASA")
+    async def NASA_DAILY(self, ctx):
         with open("./lib/cogs/NASAapikey", "r", encoding="utf-8") as nak:
             API_KEY = nak.read()
         message_channel = self.bot.get_channel(800693456015589376)
@@ -21,15 +22,17 @@ class Space(Cog):
                 title = data["title"]
                 description = data["explanation"]
                 date = data["date"]
-                if data["media_type"] == "image":
-                    image_url = data["hdurl"]
-                else:
+                if data["media_type"] == "video":
                     video_url = data["url"]
+                    video_url = video_url.replace("embed/", "watch?v=")
                     description += f"\n{video_url}"
                 embed = Embed(title=title, description=description, colour=0xF6AE2D)
+                if data["media_type"] == "image":
+                    image_url = data["hdurl"]
+                    embed.set_image(url=image_url)
                 embed.add_field(name="Date: ", value=date, inline=False)
-                embed.set_image(url=image_url)
                 await message_channel.send(embed=embed)
+                # await message_channel.send(video_url)
             else:
                 await message_channel.send(f"Oops didn't work: {response.status}")
 

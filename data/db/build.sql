@@ -36,3 +36,8 @@ CREATE TABLE IF NOT EXISTS leaderboard(
 	Mythicals INTEGER,
 	Total INTEGER
 );
+
+CREATE TABLE IF NOT EXISTS birthdays(
+	UserID INTEGER,
+	BirthdayDate DATE
+);
