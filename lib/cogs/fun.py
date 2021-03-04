@@ -1,9 +1,7 @@
 from typing import Optional
 from discord.ext.commands import Cog, command, has_permissions
-# from discord.ext.commands import BucketType, cooldown
 from discord import Embed
 from random import choice
-# import pokebase as pb
 from aiohttp import request
 from ..bot import functions
 
@@ -17,38 +15,19 @@ class Fun(Cog):
     async def love(self, ctx):
         await ctx.send(f"I love you {ctx.author.mention} :heart:")
 
-    # @command(name="roll")
-    # # @cooldown(1, 15, BucketType.default)
-    # async def roll(self, ctx, die_string: str):
-    #     dice, value = (int(term) for term in die_string.split("d"))
-    #     if dice <= 25:
-    #         rolls = [randint(1, value) for i in range(dice)]
-    #         await ctx.send(" + ".join([str(r) for r in rolls]) + f" = {sum(rolls)}")
-    #     else:
-    #         await ctx.send("Too many dice pick 25 or lower!")
-
-    # @command(name="slap")
-    # async def slap_member(self, ctx, member: Member, *, reason: Optional[str] = "no reason"):
-    #     await ctx.send(f"{ctx.author.display_name} slapped {member.mention} for {reason}")
-
-    # @slap_member.error
-    # async def slap_member_error(self, ctx, exc):
-    #     if isinstance(exc, BadArgument):
-    #         await ctx.send("That guy isn't here")
-
     @functions.in_philosophy()
-    @command(name="echo", aliases=["say"])
+    @command(name="echo", aliases=["say"], hidden=True, brief="Not for you")
     @has_permissions(manage_messages=True)
     async def echo_message(self, ctx, *, message):
         await ctx.message.delete()
         await ctx.send(message)
 
-    @command(name="nana")
+    @command(name="nana", brief="Nuh Nuh")
     async def nana(self, ctx):
         await ctx.send(f'Did you know Nana is awesome, {ctx.author.mention} ?')
 
     @functions.in_philosophy()
-    @command(name="mowafak")
+    @command(name="mowafak", brief="Some guy I know")
     async def mowafak(self, ctx):
         mowafak_list = ["a life", "a wife", "a job", "a game partner", "his dick", "someone to bother",
                         "someone to love", "someone to care", "a friend", "Samih to give a fuck",
@@ -56,13 +35,14 @@ class Fun(Cog):
                         "a drink", "a business plan"]
         await ctx.send(f'Mowafak is looking for {choice(mowafak_list)}, can anyone help?')
 
-    @command(name="saoie")
+    @command(name="saoie",)
     async def saoie(self, ctx):
         await ctx.send("Nana's wife <:saoiePeek:759791733490843648>")
 
     @functions.in_philosophy()
-    @command(name="joke")
+    @command(name="joke", brief="Get a random joke, haha!")
     async def joke(self, ctx):
+        """Gets a random joke"""
         URL = "https://some-random-api.ml/joke"
         async with request("GET", URL) as response:
             if response.status == 200:
@@ -72,7 +52,7 @@ class Fun(Cog):
                 await ctx.send(f"Error: {response.status}")
 
     @functions.in_philosophy()
-    @command(name="pikachu")
+    @command(name="pikachu", brief="Pikachuuuuuuuu")
     async def pikachu(self, ctx):
         URL = "https://some-random-api.ml/img/pikachu"
         async with request("GET", URL) as response:
@@ -86,7 +66,7 @@ class Fun(Cog):
                 await ctx.send(f"Oops didn't work: {response.status}")
 
     @functions.in_philosophy()
-    @command(name="doggo")
+    @command(name="doggo", brief="Apparantly, Everybody loves dogs.")
     async def doggo(self, ctx, breed: Optional[str]):
         if breed:
             URL = f"https://dog.ceo/api/breed/{breed}/images/random"
@@ -105,14 +85,6 @@ class Fun(Cog):
                 await ctx.send(embed=dog)
             else:
                 await ctx.send(f"Oops didn't work: {response.status}")
-
-    # @command(name="charizard")
-    # async def charizard(self, ctx):
-    #     URL = "https://play.pokemonshowdown.com/sprites/ani/charizard.gif"
-    #     embed = Embed(title="charizard",
-    #                   colour=0xF6AE2D)
-    #     embed.set_image(url=URL)
-    #     await ctx.send(embed=embed)
 
     @Cog.listener()
     async def on_ready(self):

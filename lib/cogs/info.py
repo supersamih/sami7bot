@@ -14,7 +14,7 @@ class Info(Cog):
     async def user_info(self, ctx, target: Optional[Member]):
         target = target or ctx.author
         if target.activity:
-            activity = str(target.activity.type).split('.')[-1].title() + target.activity.name
+            activity = f"{str(target.activity.type).split('.')[-1].title()}: {target.activity.name}"
         else:
             activity = "N/A"
         embed = Embed(title="User information",
