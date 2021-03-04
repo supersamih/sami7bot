@@ -15,6 +15,12 @@ def in_philosophy():
     return check(predicate)
 
 
+def in_pogge():
+    async def predicate(ctx):
+        return ctx.guild and ctx.guild.id == 724338025902899351
+    return check(predicate)
+
+
 async def embed_cycler(self, embed, message, listDescription):
     embedInfo = embed.to_dict()
     if "thumbnail" in embedInfo:
