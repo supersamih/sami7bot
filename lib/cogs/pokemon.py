@@ -169,7 +169,7 @@ class Pokemon(Cog):
         await Message.add_reaction(pokeEmbed, "❌")
         await functions.embed_cycler(self, embed, pokeEmbed, desc)
 
-    @command(name="pokestats")
+    @command(name="pokestats", hidden=True)
     @functions.is_in_channel(805615557088378930)
     async def pokestats(self, ctx):
         pddata = db.records("SELECT PokeID, PokeName, SUM(Amount) FROM pokemon GROUP BY PokeID")
@@ -199,7 +199,7 @@ class Pokemon(Cog):
             embed.add_field(name=name, value=value, inline=inline)
         await ctx.send(embed=embed)
 
-    @command(name="clearpokemon")
+    @command(name="clearpokemon", hidden=True)
     @has_permissions(manage_messages=True)
     @functions.is_in_channel(803393663832293406)
     async def clearpokemon(self, ctx):

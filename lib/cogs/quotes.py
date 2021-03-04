@@ -37,14 +37,14 @@ class Quotes(Cog):
             await ctx.send("Oops that didn't work make sure to use this format 'quote$author'", delete_after=5)
 
     @functions.in_philosophy()
-    @command(name="deletequote", aliases=["dq"])
+    @command(name="deletequote", aliases=["dq"], hidden=True)
     @has_permissions(manage_messages=True)
     async def deletequote(self, ctx, q_id: int):
         db.execute("DELETE FROM quotes WHERE QuoteID=?", q_id)
         await ctx.send(f"Entry {q_id} deleted", delete_after=5)
 
     @functions.in_philosophy()
-    @command(name="forcequote", aliases=["fq"])
+    @command(name="forcequote", aliases=["fq"], hidden=True)
     @has_permissions(manage_messages=True)
     async def forcequote(self, ctx, q_id: int):
         try:
@@ -63,7 +63,7 @@ class Quotes(Cog):
             await ctx.send(embed=embed)
 
     @functions.in_philosophy()
-    @command(name="listids", aliases=["lids"])
+    @command(name="listids", aliases=["lids"], hidden=True)
     @has_permissions(manage_messages=True)
     async def listids(self, ctx):
         all_qids = db.records("SELECT QuoteID from quotes")
