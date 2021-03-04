@@ -15,6 +15,9 @@ class isStreaming(Cog):
                 return
             if after.activity:
                 if after.activity.type == ActivityType.streaming:
+                    async for message in stream_channel.history(limit=200):
+                        if "Hey guys! <@115104854573056002> is streaming on" in message.content:
+                            return
                     stream_url = after.activity.url
                     stream_service = stream_url.split(".")[1].capitalize()
                     await stream_channel.send(f"<@&817016825761103924> Hey guys! <@115104854573056002> is streaming on {stream_service}\n{stream_url}")
