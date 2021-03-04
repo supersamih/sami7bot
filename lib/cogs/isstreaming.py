@@ -18,7 +18,7 @@ class isStreaming(Cog):
                 if after.activity.type == ActivityType.streaming:
                     stream_url = after.activity.url
                     stream_service = stream_url.split(".")[1].capitalize()
-                    await stream_channel.send(f"{role.mention} Hey guys! {after.mention} is streaming on {stream_service}\n{stream_url}")
+                    await stream_channel.send(f"{role.mention} Hey guys! <@115104854573056002> is streaming on {stream_service}\n{stream_url}")
             if before.activity:
                 if before.activity.type == ActivityType.streaming:
                     async for message in stream_channel.history(limit=200):
