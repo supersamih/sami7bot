@@ -1,5 +1,7 @@
 from discord.ext.commands import Cog
 from discord import DMChannel, Embed
+from asyncio import sleep
+from random import randint
 
 
 class Private_messages(Cog):
@@ -18,6 +20,7 @@ class Private_messages(Cog):
                                   colour=0xFF69B4,)
                     embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/784183505625415700/815993484489523230/unknown.png")
                     embed.set_footer(text="From: Secret")
+                    await sleep(randint(30, 600))
                     await message_channel.send(embed=embed)
                 else:
                     await message.channel.send("Sorry, I don't understand what you want.\nIf you want to send a secret please start your message with >secret.")
