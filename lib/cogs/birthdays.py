@@ -12,20 +12,20 @@ class Birthdays(Cog):
         self.bot = bot
         self.scheduler = AsyncIOScheduler()
 
-    @command(name="addbirthday")
+    @command(name="addbirthday", hidden=True)
     @has_permissions(manage_messages=True)
     async def addbirthday(self, ctx, target: Member, bday_date: str):
         bday_date_db = "9999-" + bday_date
         db.execute("INSERT INTO birthdays (UserID, BirthdayDate) VALUES(?, ?)", target.id, bday_date_db)
         await ctx.send(f"{target.mention}'s added to birthday database on {bday_date}")
 
-    @command(name="deletebirthday")
+    @command(name="deletebirthday", hidden=True)
     @has_permissions(manage_messages=True)
     async def deletebirthday(self, ctx, target: Member):
         db.execute("DELETE FROM birthdays WHERE UserID=?", target.id)
         await ctx.send(f"{target.mention}'s birthday was deleted from database")
 
-    @command(name="listbirthdays")
+    @command(name="listbirthdays", hidden=True)
     async def listbirthdays(self, ctx):
         x = 0
         y = 15

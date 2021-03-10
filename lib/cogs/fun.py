@@ -4,6 +4,7 @@ from discord import Embed
 from random import choice
 from aiohttp import request
 from ..bot import functions
+from datetime import datetime
 
 
 class Fun(Cog):
@@ -48,6 +49,23 @@ class Fun(Cog):
             if response.status == 200:
                 joke = await response.json()
                 await ctx.send(joke["joke"])
+            else:
+                await ctx.send(f"Error: {response.status}")
+
+    @functions.in_philosophy()
+    @command(name="fact", hidden=True)
+    @has_permissions(manage_messages=True)
+    async def fact(self, ctx):
+        URL = "https://uselessfacts.jsph.pl/random.json?language=en"
+        async with request("GET", URL) as response:
+            if response.status == 200:
+                fact = await response.json()
+                embed = Embed(title="Daily Fact",
+                              description=fact["text"],
+                              colour=0xF6AE2D)
+                embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/774393693926064129/819297346956820490/H63a7683c84234f498c4dabb89c14b542N.png")
+                embed.set_footer(text=datetime.utcnow().strftime("%m/%d/%y"))
+                await ctx.send(embed=embed)
             else:
                 await ctx.send(f"Error: {response.status}")
 
