@@ -3,9 +3,10 @@ from aiohttp import request
 from discord import Embed
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
+from datetime import datetime
 
 
-class Space(Cog):
+class Daily(Cog):
     def __init__(self, bot):
         self.bot = bot
         self.scheduler = AsyncIOScheduler()
@@ -23,7 +24,8 @@ class Space(Cog):
                 date = data["date"]
                 if data["media_type"] == "video":
                     video_url = data["url"]
-                    video_url = video_url.replace("embed/", "watch?v=")
+                    if "youtube" in video_url:
+                        video_url = video_url.replace("embed/", "watch?v=")
                     description += f"\n{video_url}"
                 embed = Embed(title=title, description=description, colour=0xF6AE2D)
                 if data["media_type"] == "image":
@@ -34,13 +36,29 @@ class Space(Cog):
             else:
                 await message_channel.send(f"Oops didn't work: {response.status}")
 
+    async def FACT_DAILY(self):
+        URL = "https://uselessfacts.jsph.pl/random.json?language=en"
+        message_channel = self.bot.get_channel(496397986226634765)
+        async with request("GET", URL) as response:
+            if response.status == 200:
+                fact = await response.json()
+                embed = Embed(title="Daily Fact",
+                              description=fact["text"],
+                              colour=0xF6AE2D)
+                embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/774393693926064129/819297346956820490/H63a7683c84234f498c4dabb89c14b542N.png")
+                embed.set_footer(text=datetime.utcnow().strftime("%m/%d/%y"))
+                await message_channel.send(embed=embed)
+            else:
+                await message_channel.send(f"Error: {response.status}")
+
     @Cog.listener()
     async def on_ready(self):
         if not self.bot.ready:
             self.scheduler.add_job(self.NASA_DAILY, CronTrigger(hour=12, minute=0, second=0))
+            self.scheduler.add_job(self.FACT_DAILY, CronTrigger(hour=16, minute=20, second=0))
             self.scheduler.start()
-            self.bot.cogs_ready.ready_up("space")
+            self.bot.cogs_ready.ready_up("daily")
 
 
 def setup(bot):
-    bot.add_cog(Space(bot))
+    bot.add_cog(Daily(bot))
