@@ -104,6 +104,21 @@ class Fun(Cog):
             else:
                 await ctx.send(f"Oops didn't work: {response.status}")
 
+    @functions.in_philosophy()
+    @command(name="cat", brief="cats > dogs")
+    async def cat(self, ctx):
+        headers = {"x-api-key": "5c4ac683-365f-4b78-bd75-d583b173bb70"}
+        URL = "https://api.thecatapi.com/v1/images/search"
+        async with request("GET", URL, headers=headers) as response:
+            if response.status == 200:
+                data = await response.json()
+                embed = Embed(title="Here is a cute cat",
+                              colour=0xF6AE2D)
+                embed.set_image(url=data[0]["url"])
+                await ctx.send(embed=embed)
+            else:
+                await ctx.send(f"Oops didn't work: {response.status}")
+
     @Cog.listener()
     async def on_ready(self):
         if not self.bot.ready:
