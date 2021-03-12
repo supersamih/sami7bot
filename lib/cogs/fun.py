@@ -1,7 +1,7 @@
 from typing import Optional
 from discord.ext.commands import Cog, command, has_permissions
 from discord import Embed
-from random import choice
+from random import choice, randint
 from aiohttp import request
 from ..bot import functions
 from datetime import datetime
@@ -118,6 +118,34 @@ class Fun(Cog):
                 await ctx.send(embed=embed)
             else:
                 await ctx.send(f"Oops didn't work: {response.status}")
+
+    @functions.in_philosophy()
+    @command(name="ac", brief="random animal crossing character")
+    async def animal_crossing(self, ctx, num: Optional[int]):
+        if not num:
+            num = randint(1, 391)
+        if num >= 1 and num <= 391:
+            URL = f"https://acnhapi.com/v1/villagers/{num}"
+            async with request("GET", URL) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    embed = Embed(title=data["name"]["name-EUen"],
+                                  colour=0xF6AE2D)
+                    fields = [("Speices:", data["species"], True),
+                              ("Gender:", data["gender"], True),
+                              ("Birthday:", data["birthday-string"], True),
+                              ("Catch Phrase:", data["catch-phrase"], False),
+                              ("Saying:", data["saying"], False)]
+                    embed.set_thumbnail(url=data["icon_uri"])
+                    embed.set_image(url=data["image_uri"])
+                    embed.set_footer(text=data["id"])
+                    for name, value, inline in fields:
+                        embed.add_field(name=name, value=value, inline=inline)
+                    await ctx.send(embed=embed)
+                else:
+                    await ctx.send(f"Oops didn't work: {response.status}")
+        else:
+            await ctx.send("Oops didn't work: Pick a number between 1 and 391")
 
     @Cog.listener()
     async def on_ready(self):
