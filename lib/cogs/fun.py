@@ -131,7 +131,7 @@ class Fun(Cog):
                     data = await response.json()
                     embed = Embed(title=data["name"]["name-EUen"],
                                   colour=0xF6AE2D)
-                    fields = [("Speices:", data["species"], True),
+                    fields = [("Species:", data["species"], True),
                               ("Gender:", data["gender"], True),
                               ("Birthday:", data["birthday-string"], True),
                               ("Catch Phrase:", data["catch-phrase"], False),
