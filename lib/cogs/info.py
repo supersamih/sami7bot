@@ -34,6 +34,15 @@ class Info(Cog):
         await ctx.send(embed=embed)
 
     @functions.in_philosophy()
+    @command(name="avatar")
+    async def avatar(self, ctx, target: Optional[Member]):
+        target = target or ctx.author
+        embed = Embed(title=f"{target.display_name}'s avatar",
+                      colour=target.colour)
+        embed.set_image(url=target.avatar_url)
+        await ctx.send(embed=embed)
+
+    @functions.in_philosophy()
     @command(name="serverinfo")
     async def server_info(self, ctx):
         embed = Embed(title="Server Information",
