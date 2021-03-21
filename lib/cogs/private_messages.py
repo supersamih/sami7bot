@@ -35,7 +35,7 @@ class Private_messages(Cog):
         if message.channel == general:
             when = datetime.utcnow().strftime("%H:%M:%S")
             embed = Embed(title=f"Pepega message by: {message.author}",
-                          description=f"{message.content}\nDeleted in: {message.channel}",
+                          description=f"Message: {message.content}\nDeleted in: {message.channel}",
                           colour=0xFF9B4)
             embed.set_footer(text=f"deleted at {when}")
             embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/778792559668625478/822838338863890432/pepega.png")

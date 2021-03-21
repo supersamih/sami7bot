@@ -1,6 +1,6 @@
 from typing import Optional
 from discord.ext.commands import Cog, command, has_permissions
-from discord import Embed
+from discord import Embed, Member
 from random import choice, randint
 from aiohttp import request
 from ..bot import functions
@@ -146,6 +146,36 @@ class Fun(Cog):
                     await ctx.send(f"Oops didn't work: {response.status}")
         else:
             await ctx.send("Oops didn't work: Pick a number between 1 and 391")
+
+    @functions.in_philosophy()
+    @command(name="slap")
+    async def slap_member(self, ctx, member: Member, *, reason: Optional[str] = "no reason"):
+        URL = "https://g.tenor.com/v1/search?q=slap&key=6NBB1TAZTYHW&limit=40"
+        async with request("GET", URL) as response:
+            if response.status == 200:
+                data = await response.json()
+                url = data["results"][randint(0, 39)]["media"][0]["gif"]["url"]
+                embed = Embed(title=f"**{ctx.author.display_name}** slapped **{member.display_name}** for **{reason}**",
+                              colour=ctx.author.colour)
+                embed.set_image(url=url)
+                await ctx.send(embed=embed)
+            else:
+                await ctx.send(f"Oops didn't work: {response.status}")
+
+    @functions.in_philosophy()
+    @command(name="hug")
+    async def hug_member(self, ctx, member: Member):
+        URL = "https://g.tenor.com/v1/search?q=wholesome_hug&key=6NBB1TAZTYHW&limit=40"
+        async with request("GET", URL) as response:
+            if response.status == 200:
+                data = await response.json()
+                url = data["results"][randint(0, 39)]["media"][0]["gif"]["url"]
+                embed = Embed(title=f"**{ctx.author.display_name}** hugs **{member.display_name}**",
+                              colour=ctx.author.colour)
+                embed.set_image(url=url)
+                await ctx.send(embed=embed)
+            else:
+                await ctx.send(f"Oops didn't work: {response.status}")
 
     @Cog.listener()
     async def on_ready(self):
