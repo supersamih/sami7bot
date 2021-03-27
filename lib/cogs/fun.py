@@ -27,6 +27,14 @@ class Fun(Cog):
     async def nana(self, ctx):
         await ctx.send(f'Did you know Nana is awesome, {ctx.author.mention} ?')
 
+    @command(name="moka", brief="ok")
+    async def moka(self, ctx):
+        await ctx.send(':regional_indicator_m: <:OmegaLUL:808348998519881728> :regional_indicator_k: :regional_indicator_a:')
+
+    @command(name="pogge", brief="old man")
+    async def pogge(self, ctx):
+        await ctx.send('Old man stop stalling pleaseeeee <:residentsleeper:799712435267043428>')
+
     @functions.in_philosophy()
     @command(name="mowafak", brief="Some guy I know")
     async def mowafak(self, ctx):
