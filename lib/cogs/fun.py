@@ -27,6 +27,10 @@ class Fun(Cog):
     async def nana(self, ctx):
         await ctx.send(f'Did you know Nana is awesome, {ctx.author.mention} ?')
 
+    @command(name="morning", brief="")
+    async def morning(self, ctx):
+        await ctx.send('Good morning all!\nEspecially Rangemer <:KEKW:809385265608785950>')
+
     @command(name="moka", brief="ok")
     async def moka(self, ctx):
         await ctx.send(':regional_indicator_m: <:OmegaLUL:808348998519881728> :regional_indicator_k: :regional_indicator_a:')
