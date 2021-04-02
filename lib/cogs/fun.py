@@ -189,6 +189,43 @@ class Fun(Cog):
             else:
                 await ctx.send(f"Oops didn't work: {response.status}")
 
+    @command(name="regionalindicatorify", aliases=["rify"])
+    async def rify(self, ctx, *, text: str):
+        rifyDict = {"a": " 🇦",
+                    "b": " 🇧",
+                    "c": " 🇨",
+                    "d": " 🇩",
+                    "e": " 🇪",
+                    "f": " 🇫",
+                    "g": " 🇬",
+                    "h": " 🇭",
+                    "i": " 🇮",
+                    "j": " 🇯",
+                    "k": " 🇰",
+                    "l": " 🇱",
+                    "m": " 🇲",
+                    "n": " 🇳",
+                    "o": " <:OmegaLUL:808348998519881728>",
+                    "p": " 🇵",
+                    "q": " 🇶",
+                    "r": " 🇷",
+                    "s": " 🇸",
+                    "t": " 🇹",
+                    "u": " 🇺",
+                    "v": " 🇻",
+                    "w": " 🇼",
+                    "x": " 🇽",
+                    "y": " 🇾",
+                    "z": " 🇿",
+                    "!": " ❕",
+                    "?": " ❔",
+                    " ": "     "}
+        textList = list(text.lower())
+        finalMessage = ""
+        for char in textList:
+            finalMessage += rifyDict[char]
+        await ctx.send(finalMessage)
+
     @Cog.listener()
     async def on_ready(self):
         if not self.bot.ready:
