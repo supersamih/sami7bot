@@ -5,6 +5,7 @@ from random import choice, randint
 from aiohttp import request
 from ..bot import functions
 from datetime import datetime
+import json
 
 
 class Fun(Cog):
@@ -191,39 +192,15 @@ class Fun(Cog):
 
     @command(name="regionalindicatorify", aliases=["rify"])
     async def rify(self, ctx, *, text: str):
-        rifyDict = {"a": " 🇦",
-                    "b": " 🇧",
-                    "c": " 🇨",
-                    "d": " 🇩",
-                    "e": " 🇪",
-                    "f": " 🇫",
-                    "g": " 🇬",
-                    "h": " 🇭",
-                    "i": " 🇮",
-                    "j": " 🇯",
-                    "k": " 🇰",
-                    "l": " 🇱",
-                    "m": " 🇲",
-                    "n": " 🇳",
-                    "o": " <:OmegaLUL:808348998519881728>",
-                    "p": " 🇵",
-                    "q": " 🇶",
-                    "r": " 🇷",
-                    "s": " 🇸",
-                    "t": " 🇹",
-                    "u": " 🇺",
-                    "v": " 🇻",
-                    "w": " 🇼",
-                    "x": " 🇽",
-                    "y": " 🇾",
-                    "z": " 🇿",
-                    "!": " ❕",
-                    "?": " ❔",
-                    " ": "     "}
+        with open("./data/rifyDict.json", encoding="utf8") as json_file:
+            rifyDict = json.load(json_file)
         textList = list(text.lower())
         finalMessage = ""
-        for char in textList:
-            finalMessage += rifyDict[char]
+        try:
+            for char in textList:
+                finalMessage += rifyDict[char]
+        except KeyError:
+            finalMessage = "Pogge broke the bot, actually i thought of a way to fix this issue but ill do it later i cba\nLove from Samih"
         await ctx.send(finalMessage)
 
     @Cog.listener()
