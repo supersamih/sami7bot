@@ -91,7 +91,7 @@ class Pokemon(Cog):
         if (_type := _type.lower()) in ["l", "legendary", "s", "shiny", "p", "pokemon"]:
             if (_type := _type.lower()) in ["l", "legendary"]:
                 x = 0
-                y = 15
+                y = 16
                 lbDescrption = ["Trainer - Legendaries\n"]
                 lb = db.records("SELECT TrainerID, Total from leaderboard")
                 lb.sort(key=lambda x: x[1], reverse=True)
