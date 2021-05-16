@@ -119,9 +119,11 @@ class Fun(Cog):
 
     @functions.in_philosophy()
     @command(name="cat", brief="cats > dogs")
-    async def cat(self, ctx):
+    async def cat(self, ctx, mime_type: Optional[str]):
         headers = {"x-api-key": "5c4ac683-365f-4b78-bd75-d583b173bb70"}
-        URL = "https://api.thecatapi.com/v1/images/search"
+        if not mime_type:
+            mime_type = ""
+        URL = f"https://api.thecatapi.com/v1/images/search?mime_types={mime_type}"
         async with request("GET", URL, headers=headers) as response:
             if response.status == 200:
                 data = await response.json()
