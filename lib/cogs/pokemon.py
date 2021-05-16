@@ -184,7 +184,7 @@ class Pokemon(Cog):
         mostshinies = db.record("SELECT TrainerID, MAX(Shinies) from leaderboard")
         mostlegendaries = db.record("SELECT TrainerID, MAX(Total) from leaderboard")
         embed = Embed(title="Everyone loves statistics",
-                      description="Stats for the feburary event of Poggemon",
+                      description="Pokemon Stats!",
                       colour=ctx.author.colour)
         fields = [("Total rolls:", totalrolls, True),
                   ("Total Pokemon:", f"{totalpokemon}/386", True),
