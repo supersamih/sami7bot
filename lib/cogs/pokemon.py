@@ -31,11 +31,11 @@ class Pokemon(Cog):
 
                 embed = Embed(description=f"{ctx.author.mention} just caught a {shiny} {name}! Added to pokedex.",
                               colour=ctx.author.colour)
-                if shiny:
-                    shinyurl = f"https://play.pokemonshowdown.com/sprites/ani-shiny/{name.lower()}.gif"
-                    embed.set_image(url=shinyurl)
+                if shinydb:
+                    imgurl = f"https://play.pokemonshowdown.com/sprites/ani-shiny/{name.lower()}.gif"
                 else:
-                    embed.set_image(url=sprite)
+                    imgurl = f"https://play.pokemonshowdown.com/sprites/ani/{name.lower()}.gif"
+                embed.set_image(url=imgurl)
                 if legendary or mythical:
                     embed.add_field(name="\u200b", value=f"**WOW!** You caught a **LEGENDARY {name.upper()}!**", inline=False)
                 await ctx.send(embed=embed)
