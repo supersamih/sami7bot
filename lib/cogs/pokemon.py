@@ -23,15 +23,15 @@ class Pokemon(Cog):
                 data = await response.json()
                 name, sprite, number, legendary, mythical = data[0]["name"], data[0]["sprite"], data[0]["number"], data[0]["legendary"], data[0]["mythical"]
                 if randint(1, 10000) <= 100:
-                    shiny = "Shiny"
+                    shiny = " Shiny "
                     shinydb = True
                 else:
-                    shiny = "\u200b"
+                    shiny = " "
                     shinydb = False
 
-                embed = Embed(description=f"{ctx.author.mention} just caught a {shiny} {name}! Added to pokedex.",
+                embed = Embed(description=f"{ctx.author.mention} just caught a{shiny}{name}! Added to pokedex.",
                               colour=ctx.author.colour)
-                if shinydb:
+                if shiny:
                     imgurl = f"https://play.pokemonshowdown.com/sprites/ani-shiny/{name.lower()}.gif"
                 else:
                     imgurl = f"https://play.pokemonshowdown.com/sprites/ani/{name.lower()}.gif"
