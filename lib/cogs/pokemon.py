@@ -31,7 +31,7 @@ class Pokemon(Cog):
 
                 embed = Embed(description=f"{ctx.author.mention} just caught a{shiny}{name}! Added to pokedex.",
                               colour=ctx.author.colour)
-                if shiny:
+                if shinydb:
                     imgurl = f"https://play.pokemonshowdown.com/sprites/ani-shiny/{name.lower()}.gif"
                 else:
                     imgurl = f"https://play.pokemonshowdown.com/sprites/ani/{name.lower()}.gif"
