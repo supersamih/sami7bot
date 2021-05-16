@@ -26,7 +26,7 @@ class Pokemon(Cog):
                     shiny = "Shiny"
                     shinydb = True
                 else:
-                    shiny = ""
+                    shiny = "\u200b"
                     shinydb = False
 
                 embed = Embed(description=f"{ctx.author.mention} just caught a {shiny} {name}! Added to pokedex.",
@@ -147,7 +147,6 @@ class Pokemon(Cog):
         for record in pd:
             counter += 1
             if record[0] != counter:
-                print(counter)
                 counter = record[0]
             if record[2]:
                 leg_count += 1
