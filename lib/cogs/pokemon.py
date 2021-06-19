@@ -14,14 +14,17 @@ class Pokemon(Cog):
         self.bot = bot
 
     @command(name="pokeroll", aliases=["pr", "poke", "pokemon"])
-    @functions.is_in_channel(805615557088378930)
+    @functions.is_in_channel(795266352381820978)
     @cooldown(1, 10800, type=BucketType.member)
     async def pokeroll(self, ctx):
         URL = f"https://pokeapi.glitch.me/v1/pokemon/{randint(1,386)}"
+        print("getting response")
         async with request("GET", URL) as response:
+            print("got response")
             if response.status == 200:
                 data = await response.json()
-                name, sprite, number, legendary, mythical = data[0]["name"], data[0]["sprite"], data[0]["number"], data[0]["legendary"], data[0]["mythical"]
+                name, sprite, number, legendary, mythical, description = data[0]["name"], data[0]["sprite"], data[0]["number"], data[0]["legendary"], data[0]["mythical"], data[0]["description"]
+
                 if randint(1, 10000) <= 100:
                     shiny = " Shiny "
                     shinydb = True
@@ -34,13 +37,14 @@ class Pokemon(Cog):
                 if shinydb:
                     imgurl = f"https://play.pokemonshowdown.com/sprites/ani-shiny/{name.lower()}.gif"
                 else:
-                    imgurl = f"https://play.pokemonshowdown.com/sprites/ani/{name.lower()}.gif"
+                    imgurl = sprite
                 embed.set_image(url=imgurl)
                 if legendary or mythical:
                     embed.add_field(name="\u200b", value=f"**WOW!** You caught a **LEGENDARY {name.upper()}!**", inline=False)
+                embed.add_field(name="Information:", value=f"{description}", inline=False)
                 await ctx.send(embed=embed)
-                checkID = db.record("SELECT PokeID FROM pokemon WHERE TrainerID = ? AND PokeID = ?", ctx.author.id, number) or 0
-                if checkID != 0:
+                checkPD = db.record("SELECT PokeID FROM pokemon WHERE TrainerID = ? AND PokeID = ?", ctx.author.id, number) or 0
+                if not checkPD:
                     db.execute("UPDATE pokemon SET Amount = Amount + 1 WHERE TrainerID=? AND PokeID=?", ctx.author.id, number)
                 else:
                     db.execute("INSERT INTO pokemon (TrainerID, PokeID, PokeName, PokeSprite, Legendary, Mythical) VALUES(?, ?, ?, ?, ?, ?)",
@@ -56,7 +60,7 @@ class Pokemon(Cog):
                 await ctx.send(f"Oh no something went wrong, {response.status} Its Glimpee's fault")
 
     @command(name="pokedex", aliases=["pd"])
-    @functions.is_in_channel(805615557088378930)
+    @functions.is_in_channel(795266352381820978)
     async def pokedex(self, ctx, target: Optional[Member]):
         target = target or ctx.author
         desc = []
@@ -85,7 +89,7 @@ class Pokemon(Cog):
         await functions.embed_cycler(self, embed, pokeEmbed, desc)
 
     @command(name="leaderboard", aliases=["lb"])
-    @functions.is_in_channel(805615557088378930)
+    @functions.is_in_channel(795266352381820978)
     async def leaderboard(self, ctx, _type: Optional[str]):
         _type = _type or "l"
         if (_type := _type.lower()) in ["l", "legendary", "s", "shiny", "p", "pokemon"]:
@@ -134,7 +138,7 @@ class Pokemon(Cog):
             await ctx.send("To access the leaderboards do >lb with either p, s or l as the command.\n```Like this >lb p```")
 
     @command(name="grouppokedex", aliases=["gpd"])
-    @functions.is_in_channel(805615557088378930)
+    @functions.is_in_channel(795266352381820978)
     async def grouppokedex(self, ctx):
         desc = [""]
         leg_count = 0
@@ -169,7 +173,7 @@ class Pokemon(Cog):
         await functions.embed_cycler(self, embed, pokeEmbed, desc)
 
     @command(name="pokestats", hidden=True)
-    @functions.is_in_channel(805615557088378930)
+    @functions.is_in_channel(795266352381820978)
     async def pokestats(self, ctx):
         pddata = db.records("SELECT PokeID, PokeName, SUM(Amount) FROM pokemon GROUP BY PokeID")
         pddata.sort(key=lambda x: x[2])
