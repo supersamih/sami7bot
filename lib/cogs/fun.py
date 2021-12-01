@@ -1,5 +1,6 @@
 from typing import Optional
 from discord.ext.commands import Cog, command, has_permissions
+from discord_slash import cog_ext, SlashContext
 from discord import Embed, Member
 from random import choice, randint
 from aiohttp import request
@@ -192,6 +193,20 @@ class Fun(Cog):
             else:
                 await ctx.send(f"Oops didn't work: {response.status}")
 
+    @cog_ext.cog_slash(name="rify", description="Append Regional Indicators to your message")
+    async def rifyy(self, ctx: SlashContext, *, text: str):
+        ctx.defer()
+        with open("./data/rifyDict.json", encoding="utf8") as json_file:
+            rifyDict = json.load(json_file)
+        textList = list(text.lower())
+        finalMessage = ""
+        try:
+            for char in textList:
+                finalMessage += rifyDict[char]
+        except KeyError:
+            finalMessage = "Pogge broke the bot, actually i thought of a way to fix this issue but ill do it later i cba\nLove from Samih"
+        await ctx.send(finalMessage)
+
     @command(name="regionalindicatorify", aliases=["rify"])
     async def rify(self, ctx, *, text: str):
         with open("./data/rifyDict.json", encoding="utf8") as json_file:
@@ -204,6 +219,15 @@ class Fun(Cog):
         except KeyError:
             finalMessage = "Pogge broke the bot, actually i thought of a way to fix this issue but ill do it later i cba\nLove from Samih"
         await ctx.send(finalMessage)
+
+    @cog_ext.cog_slash(name="ping")
+    async def ping(self, ctx: SlashContext):
+        await ctx.send("pong")
+
+    # @cog_ext.cog_slash(name="test")
+    # async def _test(self, ctx: SlashContext):
+    #     embed = Embed(title="Embed Test")
+    #     await ctx.send(embed=embed)
 
     @Cog.listener()
     async def on_ready(self):
