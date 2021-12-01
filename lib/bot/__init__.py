@@ -1,6 +1,7 @@
 import os
 from asyncio import sleep
 from discord.ext.commands import Bot as BotBase
+from discord_slash import SlashCommand, SlashContext
 from discord.ext.commands import CommandNotFound, Context, BadArgument, MissingRequiredArgument, CommandOnCooldown, CheckFailure
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord import Intents
@@ -135,3 +136,5 @@ class Bot(BotBase):
 
 
 bot = Bot()
+
+slash = SlashCommand(bot)
