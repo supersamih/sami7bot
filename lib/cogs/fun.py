@@ -195,7 +195,6 @@ class Fun(Cog):
 
     @cog_ext.cog_slash(name="rify", description="Append Regional Indicators to your message")
     async def rifyy(self, ctx: SlashContext, *, text: str):
-        ctx.defer()
         with open("./data/rifyDict.json", encoding="utf8") as json_file:
             rifyDict = json.load(json_file)
         textList = list(text.lower())

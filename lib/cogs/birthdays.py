@@ -25,6 +25,26 @@ class Birthdays(Cog):
         db.execute("DELETE FROM birthdays WHERE UserID=?", target.id)
         await ctx.send(f"{target.mention}'s birthday was deleted from database")
 
+    @command(name="cleanbirthdaylist", hidden=True)
+    @has_permissions(manage_messages=True)
+    async def cleanbirthdaylist(self, ctx):
+        cleanedListOfBirthdaysInDB = []
+        listOfMemberIDS = []
+        listOfMembersInGuild = ctx.guild.members
+        listOfBirthdaysInDB = db.records("SELECT * from birthdays ORDER BY BirthdayDate ASC")
+        for record in listOfBirthdaysInDB:
+            cleanedListOfBirthdaysInDB.append(record[0])
+        for member in listOfMembersInGuild:
+            listOfMemberIDS.append(member.id)
+        # print(cleanedListOfBirthdaysInDB)
+        # print(listOfMemberIDS)
+        listOfDeletedMembers = []
+        for entry in cleanedListOfBirthdaysInDB:
+            if entry not in listOfMemberIDS:
+                listOfDeletedMembers += entry
+                db.execute("DELETE FROM birthdays WHERE UserID=?", entry)
+        await ctx.send(f"Members who have left the server have been cleaned from the DB: {listOfDeletedMembers}")
+
     @command(name="listbirthdays", hidden=True)
     async def listbirthdays(self, ctx):
         x = 0
