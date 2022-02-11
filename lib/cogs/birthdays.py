@@ -27,6 +27,7 @@ class Birthdays(Cog):
 
     @command(name="cleanbirthdaylist", hidden=True)
     @has_permissions(manage_messages=True)
+    @functions.is_in_channel(773307586715320360)
     async def cleanbirthdaylist(self, ctx):
         cleanedListOfBirthdaysInDB = []
         listOfMemberIDS = []
