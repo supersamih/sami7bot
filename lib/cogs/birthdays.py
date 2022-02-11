@@ -42,7 +42,7 @@ class Birthdays(Cog):
         listOfDeletedMembers = []
         for entry in cleanedListOfBirthdaysInDB:
             if entry not in listOfMemberIDS:
-                listOfDeletedMembers += entry
+                listOfDeletedMembers.append(entry)
                 db.execute("DELETE FROM birthdays WHERE UserID=?", entry)
         await ctx.send(f"Members who have left the server have been cleaned from the DB: {listOfDeletedMembers}")
 
