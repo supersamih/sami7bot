@@ -11,7 +11,7 @@ def is_in_channel(channel_id):
 
 def in_philosophy():
     async def predicate(ctx):
-        allowed = (696423795128402023, 496397986226634763)
+        allowed = (696423795128402023, 496397986226634763, 938038677387497523)
         return ctx.guild and ctx.guild.id in allowed
     return check(predicate)
 
