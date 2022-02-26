@@ -3,7 +3,7 @@ from aiohttp import request
 from discord import Embed
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
-from datetime import datetime
+# from datetime import datetime
 
 
 class Daily(Cog):
@@ -14,7 +14,7 @@ class Daily(Cog):
     async def NASA_DAILY(self):
         with open("./lib/cogs/NASAapikey", "r", encoding="utf-8") as nak:
             API_KEY = nak.read()
-        message_channel = self.bot.get_channel(800693456015589376)
+        message_channels = [self.bot.get_channel(800693456015589376), self.bot.get_channel(496397986226634765)]
         URL = f"https://api.nasa.gov/planetary/apod?api_key={API_KEY}"
         async with request("GET", URL) as response:
             if response.status == 200:
@@ -32,24 +32,26 @@ class Daily(Cog):
                     image_url = data["hdurl"]
                     embed.set_image(url=image_url)
                 embed.add_field(name="Date: ", value=date, inline=False)
-                await message_channel.send(embed=embed)
+                for channel in message_channels:
+                    await channel.send(embed=embed)
             else:
-                await message_channel.send(f"Oops didn't work: {response.status}")
+                for channel in message_channels:
+                    await message_channels.send(f"Oops space thing didn't work: {response.status}")
 
-    async def FACT_DAILY(self):
-        URL = "https://uselessfacts.jsph.pl/random.json?language=en"
-        message_channel = self.bot.get_channel(496397986226634765)
-        async with request("GET", URL) as response:
-            if response.status == 200:
-                fact = await response.json()
-                embed = Embed(title="Daily Fact",
-                              description=fact["text"],
-                              colour=0xF6AE2D)
-                embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/774393693926064129/819297346956820490/H63a7683c84234f498c4dabb89c14b542N.png")
-                embed.set_footer(text=datetime.utcnow().strftime("%m/%d/%y"))
-                await message_channel.send(embed=embed)
-            else:
-                await message_channel.send(f"Error: {response.status}")
+    # async def FACT_DAILY(self):
+    #     URL = "https://uselessfacts.jsph.pl/random.json?language=en"
+    #     message_channel = self.bot.get_channel(496397986226634765)
+    #     async with request("GET", URL) as response:
+    #         if response.status == 200:
+    #             fact = await response.json()
+    #             embed = Embed(title="Daily Fact",
+    #                           description=fact["text"],
+    #                           colour=0xF6AE2D)
+    #             embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/774393693926064129/819297346956820490/H63a7683c84234f498c4dabb89c14b542N.png")
+    #             embed.set_footer(text=datetime.utcnow().strftime("%m/%d/%y"))
+    #             await message_channel.send(embed=embed)
+    #         else:
+    #             await message_channel.send(f"Error: {response.status}")
 
     @Cog.listener()
     async def on_ready(self):

@@ -15,7 +15,7 @@ class Custom_channel(Cog):
                 channel = await self.create_special_channel(after.channel.guild, f"{member.name}'s channel".capitalize())
                 if channel is not None:
                     await member.move_to(channel)
-        if before.channel is not None:
+        if before.channel.category.id is not None:
             # CATEGORY ID
             if before.channel.category.id == 847160948363231232:
                 try:
