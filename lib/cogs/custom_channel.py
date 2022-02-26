@@ -15,14 +15,18 @@ class Custom_channel(Cog):
                 channel = await self.create_special_channel(after.channel.guild, f"{member.name}'s channel".capitalize())
                 if channel is not None:
                     await member.move_to(channel)
-        if before.channel.category.id is not None:
-            # CATEGORY ID
-            if before.channel.category.id == 847160948363231232:
-                try:
-                    if len(before.channel.members) == 0:
-                        await before.channel.delete()
-                except Exception as e:
-                    print(e)
+        try:
+            if before.channel is not None:
+                # CATEGORY ID
+                if before.channel.category.id == 847160948363231232:
+                    try:
+                        if len(before.channel.members) == 0:
+                            await before.channel.delete()
+                    except Exception as e:
+                        print(e)
+        except Exception as e:
+            print(before)
+            print(e)
 
     async def create_special_channel(ctx, guild, channel_name, user_limit=None):
         for c in guild.categories:
