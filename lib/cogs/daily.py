@@ -57,7 +57,7 @@ class Daily(Cog):
     async def on_ready(self):
         if not self.bot.ready:
             self.scheduler.add_job(self.NASA_DAILY, CronTrigger(hour=12, minute=0, second=0))
-            self.scheduler.add_job(self.FACT_DAILY, CronTrigger(hour=13, minute=0, second=0))
+            # self.scheduler.add_job(self.FACT_DAILY, CronTrigger(hour=13, minute=0, second=0))
             self.scheduler.start()
             self.bot.cogs_ready.ready_up("daily")
 
